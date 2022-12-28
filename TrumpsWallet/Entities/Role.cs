@@ -16,5 +16,5 @@ namespace TrumpsWallet.Entities
         [Column(TypeName = "nvarchar(100)")]
         public string Description { get; set; }
     }
-    //AUN NO HICE LA MIGRACION A LA BD
+    
 }
