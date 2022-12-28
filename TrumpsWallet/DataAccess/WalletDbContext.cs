@@ -15,5 +15,6 @@ namespace TrumpsWallet.DataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder) { }
 
         public DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
     }
 }
