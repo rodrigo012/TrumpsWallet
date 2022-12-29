@@ -12,12 +12,30 @@ namespace TrumpsWallet.DataAccess
         {
 
         }
-        protected override void OnModelCreating(ModelBuilder modelBuilder) 
-        { 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
             base.OnModelCreating(modelBuilder);
+            this.SeedDataRole(modelBuilder);
             this.SeedDataAccounts(modelBuilder);
             this.SeedDataTransactions(modelBuilder);
-        
+
+        }
+
+        private void SeedDataRole(ModelBuilder builder)
+        {
+            builder.Entity<Role>().HasData(
+                new Role()
+                {
+                    Id = 1,
+                    Name = "Admin",
+                    Description = "Usuario Administrador",
+                },
+                new Role()
+                {
+                    Id = 2,
+                    Name = "Cliente",
+                    Description = "Usuario Cliente",
+                });
         }
 
         private void SeedDataAccounts(ModelBuilder builder)
