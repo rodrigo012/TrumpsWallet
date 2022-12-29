@@ -16,6 +16,7 @@ namespace TrumpsWallet.DataAccess
         { 
             base.OnModelCreating(modelBuilder);
             this.SeedDataAccounts(modelBuilder);
+            this.SeedDataTransactions(modelBuilder);
         
         }
 
@@ -42,12 +43,95 @@ namespace TrumpsWallet.DataAccess
                 {
                     Id = 3,
                     creationDate = DateTime.Now,
-                    money = 1500,
-                    isBlocked = false,
+                    money = 30000,
+                    isBlocked = true,
                     userId = 3
+                },
+                new Account()
+                {
+                    Id = 4,
+                    creationDate = DateTime.Now,
+                    money = 30000,
+                    isBlocked = true,
+                    userId = 4
+                },
+                new Account()
+                {
+                    Id = 5,
+                    creationDate = DateTime.Now,
+                    money = 15000,
+                    isBlocked = false,
+                    userId = 5
                 });
-        }
 
+        }
+        private void SeedDataTransactions(ModelBuilder builder)
+        {
+            builder.Entity<Transaction>().HasData(
+                new Transaction()
+                {
+                    Id = 1,
+                    UserID = 1,
+                    AccountID = 1,
+                    Date = DateTime.Now,
+                    Amount = 2000,
+                    Concept = "Transferencia",
+                    Type = "Payment",
+                    toAccountID = 2,
+
+                },
+                new Transaction()
+                {
+                    Id = 2,
+                    UserID = 2,
+                    AccountID = 2,
+                    Date = DateTime.Now,
+                    Amount = 200,
+                    Concept = "Transferencia",
+                    Type = "Payment",
+                    toAccountID = 5,
+
+                },
+                new Transaction()
+                {
+                    Id = 3,
+                    UserID = 3,
+                    AccountID = 3,
+                    Date = DateTime.Now,
+                    Amount = 150,
+                    Concept = "Recarga",
+                    Type = "Topup",
+                    toAccountID = 2,
+
+                },
+                new Transaction()
+                {
+                    Id = 4,
+                    UserID = 4,
+                    AccountID = 4,
+                    Date = DateTime.Now,
+                    Amount = 2000,
+                    Concept = "Transferencia",
+                    Type = "Payment",
+                    toAccountID = 1,
+
+                },
+                new Transaction()
+                {
+                    Id = 5,
+                    UserID = 5,
+                    AccountID = 5,
+                    Date = DateTime.Now,
+                    Amount = 2000,
+                    Concept = "Recarga",
+                    Type = "Topup",
+                    toAccountID = 3,
+
+                });
+
+        }
+        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<User> Users { get; set; }
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
     }

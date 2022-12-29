@@ -6,6 +6,8 @@ namespace TrumpsWallet.Entities {
     public decimal Amount { get; set; }
     public string Concept { get; set; }
     public DateTime Date { get; set; }
+
+        
     public string Type { get; set; }
 
     public int toAccountID { get; set; }
@@ -18,8 +20,6 @@ namespace TrumpsWallet.Entities {
     public int UserID { get; set; }
 
     public User User { get; set; }
-
-        //public toAccountId UserID { get; set;}
 
     }
 }
