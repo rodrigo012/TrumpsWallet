@@ -4,12 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace TrumpsWallet.Entities
 {
     [Table("Role")]
-    public class Role
+    public class Role : BaseEntity
     {
-        [Key]
-        [Column(TypeName = "int")]
-        public int Id { get; set; }
-
         [Column(TypeName = "nvarchar(50)")]
         public string Name { get; set; }
 
