@@ -8,7 +8,7 @@ namespace TrumpsWallet.Entities {
     public DateTime Date { get; set; }
     public string Type { get; set; }
 
-    public int to_AccountID { get; set; }
+    public int toAccountID { get; set; }
 
     [ForeignKey("Account")]
     public int AccountID { get; set; }
@@ -17,11 +17,9 @@ namespace TrumpsWallet.Entities {
     [ForeignKey("User")]
     public int UserID { get; set; }
 
-        //  public User User { get; set; }
+    public User User { get; set; }
 
-        //public to_account_id UserID { get; set;}
-
-
+        //public toAccountId UserID { get; set;}
 
     }
 }
