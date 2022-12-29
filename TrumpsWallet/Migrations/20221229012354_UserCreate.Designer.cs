@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrumpsWallet.DataAccess;
 
@@ -11,9 +12,10 @@ using TrumpsWallet.DataAccess;
 namespace TrumpsWallet.Migrations
 {
     [DbContext(typeof(WalletDbContext))]
-    partial class WalletDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221229012354_UserCreate")]
+    partial class UserCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,59 +55,6 @@ namespace TrumpsWallet.Migrations
                     b.HasIndex("userId");
 
                     b.ToTable("Accounts");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IsDeleted = false,
-                            LastModified = new DateTime(2022, 12, 29, 1, 34, 30, 596, DateTimeKind.Utc).AddTicks(1166),
-                            creationDate = new DateTime(2022, 12, 28, 22, 34, 30, 596, DateTimeKind.Local).AddTicks(1170),
-                            isBlocked = false,
-                            money = 81000f,
-                            userId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            IsDeleted = false,
-                            LastModified = new DateTime(2022, 12, 29, 1, 34, 30, 596, DateTimeKind.Utc).AddTicks(1180),
-                            creationDate = new DateTime(2022, 12, 28, 22, 34, 30, 596, DateTimeKind.Local).AddTicks(1181),
-                            isBlocked = true,
-                            money = 30000f,
-                            userId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            IsDeleted = false,
-                            LastModified = new DateTime(2022, 12, 29, 1, 34, 30, 596, DateTimeKind.Utc).AddTicks(1182),
-                            creationDate = new DateTime(2022, 12, 28, 22, 34, 30, 596, DateTimeKind.Local).AddTicks(1182),
-                            isBlocked = false,
-                            money = 1500f,
-                            userId = 3
-                        });
-                });
-
-            modelBuilder.Entity("TrumpsWallet.Entities.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Role");
                 });
 
             modelBuilder.Entity("TrumpsWallet.Entities.Role", b =>
