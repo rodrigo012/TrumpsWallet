@@ -20,18 +20,9 @@ namespace TrumpsWallet.Repositories
             _entities = context.Set<T>();
         }
 
-        public async Task<bool> Delete(int Id)
+        public void  Delete(T entity)
         {
-            var entity = await GetById(Id);
-            if (entity != null)
-            {
-                entity.IsDeleted = true;
-                entity.LastModified = DateTime.Now;
-                _context.Set<T>().Update(entity);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            return false;
+            _entities.Remove(entity);
         }
 
 
