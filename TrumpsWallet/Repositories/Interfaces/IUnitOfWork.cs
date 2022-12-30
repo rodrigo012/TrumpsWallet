@@ -4,7 +4,7 @@ namespace TrumpsWallet.Repositories.Interfaces
 {
     public interface IUnitOfWork
     {
-        IGenericRepository<Transaction> TransactionRepository { get; }
+        public IGenericRepository<Transaction> TransactionRepository { get; }
         void SaveChanges();
         Task SaveChangesAsync();
     }
