@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TrumpsWallet.Core.Services.Intefaces;
 using TrumpsWallet.Entities;
-
+using Microsoft.AspNetCore.Http;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TrumpsWallet.Controllers
@@ -14,7 +14,7 @@ namespace TrumpsWallet.Controllers
         
         public TransactionController(ITransactionService transactionService)
         {
-            _transactionService = transactionService;
+            this._transactionService = transactionService;
         }
 
         // GET: api/<ValuesController>
@@ -35,8 +35,10 @@ namespace TrumpsWallet.Controllers
         [HttpPost]
         public async Task<ActionResult> Post(Transaction transaction)
         {
-            await _transactionService.InsertAsync(transaction);
-            return new CreatedAtRouteResult("getTransaction", new { id = transaction.Id }, transaction);
+            {
+                await _transactionService.InsertAsync(transaction);
+                return new CreatedAtRouteResult("getTransaction", new { id = transaction.Id }, transaction);
+            }
         }
 
         // PUT api/<ValuesController>/5
