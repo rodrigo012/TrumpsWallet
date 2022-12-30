@@ -10,7 +10,7 @@ namespace TrumpsWallet.DataAccess
             builder.Entity<Account>().HasData(
                 new Account()
                 {
-
+                    Id= 1,
                     creationDate = DateTime.Now,
                     money = 81000,
                     isBlocked = false,
@@ -18,7 +18,7 @@ namespace TrumpsWallet.DataAccess
                 },
                 new Account()
                 {
-
+                    Id= 2,
                     creationDate = DateTime.Now,
                     money = 30000,
                     isBlocked = true,
@@ -26,7 +26,7 @@ namespace TrumpsWallet.DataAccess
                 },
                 new Account()
                 {
-
+                    Id = 3,
                     creationDate = DateTime.Now,
                     money = 30000,
                     isBlocked = true,
@@ -34,7 +34,7 @@ namespace TrumpsWallet.DataAccess
                 },
                 new Account()
                 {
-
+                    Id=4,
                     creationDate = DateTime.Now,
                     money = 30000,
                     isBlocked = true,
@@ -42,7 +42,7 @@ namespace TrumpsWallet.DataAccess
                 },
                 new Account()
                 {
-
+                    Id=5,
                     creationDate = DateTime.Now,
                     money = 15000,
                     isBlocked = false,
@@ -52,3 +52,4 @@ namespace TrumpsWallet.DataAccess
         }
     }
 }
+
