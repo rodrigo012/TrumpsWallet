@@ -12,10 +12,12 @@ namespace TrumpsWallet.Repositories
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
         private readonly WalletDbContext _context;
+        private readonly DbSet<T> _entities;
 
         public GenericRepository(WalletDbContext context)
         {
             _context = context;
+            _entities = context.Set<T>();
         }
 
         public async Task<bool> Delete(int Id)
@@ -32,10 +34,16 @@ namespace TrumpsWallet.Repositories
             return false;
         }
 
-        public async Task<List<T>> GetAll() => await _context.Set<T>().Where(x => !x.IsDeleted).ToListAsync();
 
-        public async Task<T> GetById(int Id) => await (from t in _context.Set<T>() where t.Id == Id && !t.IsDeleted select t).FirstOrDefaultAsync();
+        public async Task<List<T>> GetAll()
+        {
+            return await _entities.ToListAsync();
+        }
 
+        public async Task<T> GetById(int id)
+        {
+            return await _entities.FirstOrDefaultAsync(e => e.Id == id);
+        }
         public async Task<bool> Insert(T entity)
         {
             await _context.Set<T>().AddAsync(entity);

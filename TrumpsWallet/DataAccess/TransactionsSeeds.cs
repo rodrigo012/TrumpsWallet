@@ -10,8 +10,8 @@ namespace TrumpsWallet.DataAccess
             builder.Entity<Transaction>().HasData(
                 new Transaction()
                 {
-
-                    UserID = 1,
+                    Id= 1,
+                    userId = 1,
                     AccountID = 1,
                     Date = DateTime.Now,
                     Amount = 2000,
@@ -22,8 +22,8 @@ namespace TrumpsWallet.DataAccess
                 },
                 new Transaction()
                 {
-
-                    UserID = 2,
+                    Id=2,
+                    userId = 2,
                     AccountID = 2,
                     Date = DateTime.Now,
                     Amount = 200,
@@ -34,8 +34,8 @@ namespace TrumpsWallet.DataAccess
                 },
                 new Transaction()
                 {
-
-                    UserID = 1,
+                    Id=3,
+                    userId = 1,
                     AccountID = 1,
                     Date = DateTime.Now,
                     Amount = 150,
@@ -45,8 +45,8 @@ namespace TrumpsWallet.DataAccess
                 },
                 new Transaction()
                 {
-
-                    UserID = 3,
+                    Id =4,
+                    userId = 3,
                     AccountID = 3,
                     Date = DateTime.Now,
                     Amount = 2000,
@@ -57,8 +57,8 @@ namespace TrumpsWallet.DataAccess
                 },
                 new Transaction()
                 {
-
-                    UserID = 4,
+                    Id=5,
+                    userId = 4,
                     AccountID = 4,
                     Date = DateTime.Now,
                     Amount = 2000,

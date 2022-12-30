@@ -17,5 +17,6 @@ namespace TrumpsWallet.Repositories.Interfaces
         Task<bool> Update(T entity);
         Task<List<T>> GetAsync(QueryProperty<T> query);
         Task<int> CountElements();
+        Task Delete(Transaction transactionToDelete);
     }
 }
