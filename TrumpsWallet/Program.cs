@@ -4,6 +4,7 @@ using TrumpsWallet.Repositories.Interfaces;
 using TrumpsWallet.Repositories;
 using TrumpsWallet.Core.Services.Intefaces;
 using TrumpsWallet.Core.Services;
+using TrumpsWallet.Core.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+
 
 var app = builder.Build();
 
