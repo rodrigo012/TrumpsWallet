@@ -11,37 +11,38 @@ namespace TrumpsWallet.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
-        private readonly WalletDbContext _context;
+        private readonly WalletDbContext context;
+        private readonly DbSet<T> _entities;
+        
 
         public GenericRepository(WalletDbContext context)
         {
-            _context = context;
+            this.context = context;
+            _entities = context.Set<T>();
         }
-
-        public async Task<bool> Delete(int Id)
+        public void Delete(int id)
         {
-            var entity = await GetById(Id);
-            if (entity != null)
+
+            var entityToDelete = _entities.Find(id);
+            if (entityToDelete != null)
             {
-                entity.IsDeleted = true;
-                entity.LastModified = DateTime.Now;
-                _context.Set<T>().Update(entity);
-                await _context.SaveChangesAsync();
-                return true;
+                context.Remove(entityToDelete);
+                context.SaveChanges();
             }
-            return false;
         }
 
-        public async Task<List<T>> GetAll() => await _context.Set<T>().Where(x => !x.IsDeleted).ToListAsync();
 
-        public async Task<T> GetById(int Id) => await (from t in _context.Set<T>() where t.Id == Id && !t.IsDeleted select t).FirstOrDefaultAsync();
+
+        public async Task<List<T>> GetAll() => await this.context.Set<T>().Where(x => !x.IsDeleted).ToListAsync();
+
+        public async Task<T> GetById(int Id) => await (from t in this.context.Set<T>() where t.Id == Id && !t.IsDeleted select t).FirstOrDefaultAsync();
 
         public async Task<bool> Insert(T entity)
         {
-            await _context.Set<T>().AddAsync(entity);
+            await this.context.Set<T>().AddAsync(entity);
             try
             {
-                await _context.SaveChangesAsync();
+                await this.context.SaveChangesAsync();
                 return true;
             }
             catch (Exception e)
@@ -52,10 +53,10 @@ namespace TrumpsWallet.Repositories
 
         public async Task<bool> InsertRange(List<T> entity)
         {
-            await _context.Set<T>().AddRangeAsync(entity);
+            await this.context.Set<T>().AddRangeAsync(entity);
             try
             {
-                await _context.SaveChangesAsync();
+                await this.context.SaveChangesAsync();
                 return true;
             }
             catch (Exception e)
@@ -70,8 +71,7 @@ namespace TrumpsWallet.Repositories
             {
                 if (entity != null)
                 {
-                    _context.Set<T>().Update(entity);
-                    await _context.SaveChangesAsync();
+                    this.context.Set<T>().Update(entity);
                     return true;
                 }
                 return false;
@@ -82,39 +82,6 @@ namespace TrumpsWallet.Repositories
             }
         }
 
-        public async Task<List<T>> GetAsync(QueryProperty<T> query)
-        {
-            try
-            {
-                var source = ApplyQuery(query, _context.Set<T>().AsQueryable().Where(x => !x.IsDeleted));
-                return await source.ToListAsync();
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
-
-        public async Task<int> CountElements() => await _context.Set<T>().CountAsync();
-
-        private static IQueryable<T> ApplyQuery(QueryProperty<T> query, IQueryable<T> source)
-        {
-            if (query is null)
-                return source;
-
-            if (query.Where is not null)
-                source = source.Where(query.Where);
-
-            foreach (var property in query.Includes)
-                source = source.Include(property);
-
-            if (query.Skip > 0)
-                source = source.Skip(query.Skip);
-
-            if (query.Take > 0)
-                source = source.Take(query.Take);
-
-            return source;
-        }
+        
     }
 }
