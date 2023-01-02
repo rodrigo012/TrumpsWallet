@@ -12,6 +12,7 @@ namespace TrumpsWallet.Repositories
         private readonly IGenericRepository<Account> accountRepository;
         private readonly IGenericRepository<Transaction> _transactionRepository;
         private readonly IGenericRepository<Role> _roleRepository;
+        private readonly IGenericRepository<User> _userRepository;
 
         public UnitOfWork(WalletDbContext context)
         {
@@ -23,7 +24,7 @@ namespace TrumpsWallet.Repositories
             return context;
         }
 
-        public IGenericRepository<Account> AccountRepository => accountRepository ?? new GenericRepository<Account>(this.context);
+        
 
         public void SaveChanges()
         {
@@ -36,6 +37,8 @@ namespace TrumpsWallet.Repositories
         }
         public IGenericRepository<Transaction> TransactionRepository => _transactionRepository ?? new GenericRepository<Transaction>(context);
         public IGenericRepository<Role> RoleRepository => _roleRepository ?? new GenericRepository<Role>(context);
+        public IGenericRepository<User> UserRepository => _userRepository ?? new GenericRepository<User>(context);
+        public IGenericRepository<Account> AccountRepository => accountRepository ?? new GenericRepository<Account>(context);
 
     }
 }
