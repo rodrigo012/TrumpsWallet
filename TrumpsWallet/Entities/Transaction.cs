@@ -16,10 +16,8 @@ namespace TrumpsWallet.Entities {
     public int AccountID { get; set; }
 
     public Account Account { get; set; }
-    [ForeignKey("User")]
+ 
     public int UserID { get; set; }
-
-    public User User { get; set; }
 
     }
 }

@@ -3,14 +3,15 @@ using TrumpsWallet.Entities;
 
 namespace TrumpsWallet.DataAccess
 {
-    public static class UsersSeeds
+    public static class UserSeed
     {
 
-        public static void UsersSeed(this ModelBuilder builder)
+        public static void UserDataSeed(this ModelBuilder builder)
         {
             builder.Entity<User>().HasData(
                 new User()
                 {
+                    Id = 1,
                     FirstName = "Franco",
                     LastName = "Villarreal",
                     Email = "Franco44305@gmail.com",
@@ -20,7 +21,7 @@ namespace TrumpsWallet.DataAccess
                 },
                 new User()
                 {
-
+                    Id=2,
                     FirstName = "Yelfran",
                     LastName = "Giuseppe",
                     Email = "Yelfran@gmail.com",
@@ -30,7 +31,7 @@ namespace TrumpsWallet.DataAccess
                 },
                 new User()
                 {
-
+                    Id=3,
                     FirstName = "Rodrigo",
                     LastName = "Roman",
                     Email = "RodrigoRoman@gmail.com",
@@ -40,7 +41,7 @@ namespace TrumpsWallet.DataAccess
                 },
                 new User()
                 {
-
+                    Id=4,
                     FirstName = "Luciano",
                     LastName = "Manzanelli",
                     Email = "ManzanelliLuciano@gmail.com",
@@ -50,7 +51,7 @@ namespace TrumpsWallet.DataAccess
                 },
                 new User()
                 {
-
+                    Id=5,
                     FirstName = "Daniel",
                     LastName = "Depablos",
                     Email = "DaniDepablos@gmail.com",

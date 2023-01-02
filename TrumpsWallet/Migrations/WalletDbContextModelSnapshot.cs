@@ -42,8 +42,8 @@ namespace TrumpsWallet.Migrations
                     b.Property<bool>("isBlocked")
                         .HasColumnType("bit");
 
-                    b.Property<float>("money")
-                        .HasColumnType("real");
+                    b.Property<decimal>("money")
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<int>("userId")
                         .HasColumnType("int");
@@ -52,57 +52,57 @@ namespace TrumpsWallet.Migrations
 
                     b.HasIndex("userId");
 
-                    b.ToTable("Accounts");
+                    b.ToTable("Account");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             IsDeleted = false,
-                            LastModified = new DateTime(2022, 12, 29, 14, 34, 10, 362, DateTimeKind.Utc).AddTicks(1469),
-                            creationDate = new DateTime(2022, 12, 29, 11, 34, 10, 362, DateTimeKind.Local).AddTicks(1477),
+                            LastModified = new DateTime(2022, 12, 31, 1, 48, 17, 740, DateTimeKind.Utc).AddTicks(53),
+                            creationDate = new DateTime(2022, 12, 30, 22, 48, 17, 740, DateTimeKind.Local).AddTicks(56),
                             isBlocked = false,
-                            money = 81000f,
+                            money = 81000m,
                             userId = 1
                         },
                         new
                         {
                             Id = 2,
                             IsDeleted = false,
-                            LastModified = new DateTime(2022, 12, 29, 14, 34, 10, 362, DateTimeKind.Utc).AddTicks(1486),
-                            creationDate = new DateTime(2022, 12, 29, 11, 34, 10, 362, DateTimeKind.Local).AddTicks(1486),
+                            LastModified = new DateTime(2022, 12, 31, 1, 48, 17, 740, DateTimeKind.Utc).AddTicks(66),
+                            creationDate = new DateTime(2022, 12, 30, 22, 48, 17, 740, DateTimeKind.Local).AddTicks(66),
                             isBlocked = true,
-                            money = 30000f,
+                            money = 30000m,
                             userId = 2
                         },
                         new
                         {
                             Id = 3,
                             IsDeleted = false,
-                            LastModified = new DateTime(2022, 12, 29, 14, 34, 10, 362, DateTimeKind.Utc).AddTicks(1487),
-                            creationDate = new DateTime(2022, 12, 29, 11, 34, 10, 362, DateTimeKind.Local).AddTicks(1488),
+                            LastModified = new DateTime(2022, 12, 31, 1, 48, 17, 740, DateTimeKind.Utc).AddTicks(67),
+                            creationDate = new DateTime(2022, 12, 30, 22, 48, 17, 740, DateTimeKind.Local).AddTicks(67),
                             isBlocked = true,
-                            money = 30000f,
+                            money = 30000m,
                             userId = 3
                         },
                         new
                         {
                             Id = 4,
                             IsDeleted = false,
-                            LastModified = new DateTime(2022, 12, 29, 14, 34, 10, 362, DateTimeKind.Utc).AddTicks(1488),
-                            creationDate = new DateTime(2022, 12, 29, 11, 34, 10, 362, DateTimeKind.Local).AddTicks(1489),
+                            LastModified = new DateTime(2022, 12, 31, 1, 48, 17, 740, DateTimeKind.Utc).AddTicks(68),
+                            creationDate = new DateTime(2022, 12, 30, 22, 48, 17, 740, DateTimeKind.Local).AddTicks(68),
                             isBlocked = true,
-                            money = 30000f,
+                            money = 30000m,
                             userId = 4
                         },
                         new
                         {
                             Id = 5,
                             IsDeleted = false,
-                            LastModified = new DateTime(2022, 12, 29, 14, 34, 10, 362, DateTimeKind.Utc).AddTicks(1489),
-                            creationDate = new DateTime(2022, 12, 29, 11, 34, 10, 362, DateTimeKind.Local).AddTicks(1490),
+                            LastModified = new DateTime(2022, 12, 31, 1, 48, 17, 740, DateTimeKind.Utc).AddTicks(69),
+                            creationDate = new DateTime(2022, 12, 30, 22, 48, 17, 740, DateTimeKind.Local).AddTicks(69),
                             isBlocked = false,
-                            money = 15000f,
+                            money = 15000m,
                             userId = 5
                         });
                 });
@@ -132,6 +132,24 @@ namespace TrumpsWallet.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Role");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Usuario Administrador",
+                            IsDeleted = false,
+                            LastModified = new DateTime(2022, 12, 31, 1, 48, 17, 739, DateTimeKind.Utc).AddTicks(9915),
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Usuario Cliente",
+                            IsDeleted = false,
+                            LastModified = new DateTime(2022, 12, 31, 1, 48, 17, 739, DateTimeKind.Utc).AddTicks(9917),
+                            Name = "Cliente"
+                        });
                 });
 
             modelBuilder.Entity("TrumpsWallet.Entities.Transaction", b =>
@@ -175,8 +193,6 @@ namespace TrumpsWallet.Migrations
 
                     b.HasIndex("AccountID");
 
-                    b.HasIndex("UserID");
-
                     b.ToTable("Transactions");
 
                     b.HasData(
@@ -186,12 +202,12 @@ namespace TrumpsWallet.Migrations
                             AccountID = 1,
                             Amount = 2000m,
                             Concept = "Transferencia",
-                            Date = new DateTime(2022, 12, 29, 11, 34, 10, 362, DateTimeKind.Local).AddTicks(1599),
+                            Date = new DateTime(2022, 12, 30, 22, 48, 17, 740, DateTimeKind.Local).AddTicks(85),
                             IsDeleted = false,
-                            LastModified = new DateTime(2022, 12, 29, 14, 34, 10, 362, DateTimeKind.Utc).AddTicks(1598),
+                            LastModified = new DateTime(2022, 12, 31, 1, 48, 17, 740, DateTimeKind.Utc).AddTicks(84),
                             Type = "Payment",
                             UserID = 1,
-                            toAccountID = 2
+                            toAccountID = 10
                         },
                         new
                         {
@@ -199,51 +215,51 @@ namespace TrumpsWallet.Migrations
                             AccountID = 2,
                             Amount = 200m,
                             Concept = "Transferencia",
-                            Date = new DateTime(2022, 12, 29, 11, 34, 10, 362, DateTimeKind.Local).AddTicks(1603),
+                            Date = new DateTime(2022, 12, 30, 22, 48, 17, 740, DateTimeKind.Local).AddTicks(88),
                             IsDeleted = false,
-                            LastModified = new DateTime(2022, 12, 29, 14, 34, 10, 362, DateTimeKind.Utc).AddTicks(1602),
+                            LastModified = new DateTime(2022, 12, 31, 1, 48, 17, 740, DateTimeKind.Utc).AddTicks(88),
                             Type = "Payment",
                             UserID = 2,
-                            toAccountID = 5
+                            toAccountID = 3
                         },
                         new
                         {
                             Id = 3,
-                            AccountID = 3,
+                            AccountID = 1,
                             Amount = 150m,
                             Concept = "Recarga",
-                            Date = new DateTime(2022, 12, 29, 11, 34, 10, 362, DateTimeKind.Local).AddTicks(1604),
+                            Date = new DateTime(2022, 12, 30, 22, 48, 17, 740, DateTimeKind.Local).AddTicks(90),
                             IsDeleted = false,
-                            LastModified = new DateTime(2022, 12, 29, 14, 34, 10, 362, DateTimeKind.Utc).AddTicks(1604),
+                            LastModified = new DateTime(2022, 12, 31, 1, 48, 17, 740, DateTimeKind.Utc).AddTicks(89),
                             Type = "Topup",
-                            UserID = 3,
-                            toAccountID = 2
+                            UserID = 1,
+                            toAccountID = 0
                         },
                         new
                         {
                             Id = 4,
-                            AccountID = 4,
+                            AccountID = 3,
                             Amount = 2000m,
                             Concept = "Transferencia",
-                            Date = new DateTime(2022, 12, 29, 11, 34, 10, 362, DateTimeKind.Local).AddTicks(1606),
+                            Date = new DateTime(2022, 12, 30, 22, 48, 17, 740, DateTimeKind.Local).AddTicks(91),
                             IsDeleted = false,
-                            LastModified = new DateTime(2022, 12, 29, 14, 34, 10, 362, DateTimeKind.Utc).AddTicks(1605),
+                            LastModified = new DateTime(2022, 12, 31, 1, 48, 17, 740, DateTimeKind.Utc).AddTicks(90),
                             Type = "Payment",
-                            UserID = 4,
+                            UserID = 3,
                             toAccountID = 1
                         },
                         new
                         {
                             Id = 5,
-                            AccountID = 5,
+                            AccountID = 4,
                             Amount = 2000m,
                             Concept = "Recarga",
-                            Date = new DateTime(2022, 12, 29, 11, 34, 10, 362, DateTimeKind.Local).AddTicks(1607),
+                            Date = new DateTime(2022, 12, 30, 22, 48, 17, 740, DateTimeKind.Local).AddTicks(92),
                             IsDeleted = false,
-                            LastModified = new DateTime(2022, 12, 29, 14, 34, 10, 362, DateTimeKind.Utc).AddTicks(1606),
+                            LastModified = new DateTime(2022, 12, 31, 1, 48, 17, 740, DateTimeKind.Utc).AddTicks(92),
                             Type = "Topup",
-                            UserID = 5,
-                            toAccountID = 3
+                            UserID = 4,
+                            toAccountID = 0
                         });
                 });
 
@@ -292,6 +308,68 @@ namespace TrumpsWallet.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "Franco44305@gmail.com",
+                            FirstName = "Franco",
+                            IsDeleted = false,
+                            LastModified = new DateTime(2022, 12, 31, 1, 48, 17, 740, DateTimeKind.Utc).AddTicks(6),
+                            LastName = "Villarreal",
+                            Password = "123456789",
+                            Point = 7,
+                            RoleId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "Yelfran@gmail.com",
+                            FirstName = "Yelfran",
+                            IsDeleted = false,
+                            LastModified = new DateTime(2022, 12, 31, 1, 48, 17, 740, DateTimeKind.Utc).AddTicks(34),
+                            LastName = "Giuseppe",
+                            Password = "Lion222",
+                            Point = 5,
+                            RoleId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "RodrigoRoman@gmail.com",
+                            FirstName = "Rodrigo",
+                            IsDeleted = false,
+                            LastModified = new DateTime(2022, 12, 31, 1, 48, 17, 740, DateTimeKind.Utc).AddTicks(35),
+                            LastName = "Roman",
+                            Password = "LeoMessi2022",
+                            Point = 4,
+                            RoleId = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Email = "ManzanelliLuciano@gmail.com",
+                            FirstName = "Luciano",
+                            IsDeleted = false,
+                            LastModified = new DateTime(2022, 12, 31, 1, 48, 17, 740, DateTimeKind.Utc).AddTicks(36),
+                            LastName = "Manzanelli",
+                            Password = "LM1830",
+                            Point = 6,
+                            RoleId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Email = "DaniDepablos@gmail.com",
+                            FirstName = "Daniel",
+                            IsDeleted = false,
+                            LastModified = new DateTime(2022, 12, 31, 1, 48, 17, 740, DateTimeKind.Utc).AddTicks(37),
+                            LastName = "Depablos",
+                            Password = "Mango207",
+                            Point = 3,
+                            RoleId = 1
+                        });
                 });
 
             modelBuilder.Entity("TrumpsWallet.Entities.Account", b =>
@@ -313,15 +391,7 @@ namespace TrumpsWallet.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TrumpsWallet.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Account");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TrumpsWallet.Entities.User", b =>
