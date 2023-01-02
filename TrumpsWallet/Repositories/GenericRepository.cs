@@ -12,26 +12,24 @@ namespace TrumpsWallet.Repositories
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
         private readonly WalletDbContext context;
-        private readonly DbSet<T> _entities;
-        
+        protected readonly DbSet<T> entities;
 
         public GenericRepository(WalletDbContext context)
         {
             this.context = context;
-            _entities = context.Set<T>();
+            entities = context.Set<T>();
         }
-        public void Delete(int id)
+
+        public async Task<bool> Delete(int Id)
         {
-
-            var entityToDelete = _entities.Find(id);
-            if (entityToDelete != null)
+            var entity = await GetById(Id);
+            if (entity != null)
             {
-                context.Remove(entityToDelete);
-                context.SaveChanges();
+                context.Remove(entity);
+                return true;
             }
+            return false;
         }
-
-
 
         public async Task<List<T>> GetAll() => await this.context.Set<T>().Where(x => !x.IsDeleted).ToListAsync();
 
@@ -39,10 +37,10 @@ namespace TrumpsWallet.Repositories
 
         public async Task<bool> Insert(T entity)
         {
-            await this.context.Set<T>().AddAsync(entity);
+            
             try
             {
-                await this.context.SaveChangesAsync();
+                await entities.AddAsync(entity);
                 return true;
             }
             catch (Exception e)
@@ -53,10 +51,10 @@ namespace TrumpsWallet.Repositories
 
         public async Task<bool> InsertRange(List<T> entity)
         {
-            await this.context.Set<T>().AddRangeAsync(entity);
+            
             try
             {
-                await this.context.SaveChangesAsync();
+                await entities.AddRangeAsync(entity);
                 return true;
             }
             catch (Exception e)
@@ -65,13 +63,19 @@ namespace TrumpsWallet.Repositories
             }
         }
 
-        public async Task<bool> Update(T entity)
+        public async Task<bool> Update(T entityUpdate)
         {
             try
             {
-                if (entity != null)
+                if (entityUpdate != null)
                 {
-                    this.context.Set<T>().Update(entity);
+                    var entity = await context.Accounts.FindAsync(entityUpdate.Id);
+
+                    if (entity is null)
+                    {
+                        throw new NullReferenceException("La cuenta no existe");
+                    }
+                    context.Set<T>().Update(entityUpdate);
                     return true;
                 }
                 return false;
@@ -82,6 +86,5 @@ namespace TrumpsWallet.Repositories
             }
         }
 
-        
     }
 }

@@ -1,4 +1,4 @@
-﻿using TrumpsWallet.Core.Services.Intefaces;
+﻿using TrumpsWallet.Core.Services.Interfaces;
 using TrumpsWallet.Entities;
 using TrumpsWallet.Repositories;
 using TrumpsWallet.Repositories.Interfaces;

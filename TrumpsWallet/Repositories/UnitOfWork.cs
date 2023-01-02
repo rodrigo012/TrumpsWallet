@@ -8,7 +8,8 @@ namespace TrumpsWallet.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly WalletDbContext _context;
+        private readonly WalletDbContext context;
+        private readonly IGenericRepository<Account> accountRepository;
         private readonly IGenericRepository<Transaction> _transactionRepository;
         private readonly IGenericRepository<Role> _roleRepository;
 
@@ -22,7 +23,7 @@ namespace TrumpsWallet.Repositories
             return context;
         }
 
-        public IGenericRepository<Account> AccountRepository => accountRepository ?? new AccountRepository<Account>(this.context);
+        public IGenericRepository<Account> AccountRepository => accountRepository ?? new GenericRepository<Account>(this.context);
 
         public void SaveChanges()
         {
@@ -33,12 +34,9 @@ namespace TrumpsWallet.Repositories
         {
             await context.SaveChangesAsync();
         }
-        public IGenericRepository<Transaction> TransactionRepository => _transactionRepository ?? new GenericRepository<Transaction>(_context);
-        public IGenericRepository<Role> RoleRepository => _roleRepository ?? new GenericRepository<Role>(_context);
+        public IGenericRepository<Transaction> TransactionRepository => _transactionRepository ?? new GenericRepository<Transaction>(context);
+        public IGenericRepository<Role> RoleRepository => _roleRepository ?? new GenericRepository<Role>(context);
 
-        public void SaveChanges() =>_context.SaveChanges();
-
-        public async Task SaveChangesAsync() =>await _context.SaveChangesAsync();
     }
 }
 

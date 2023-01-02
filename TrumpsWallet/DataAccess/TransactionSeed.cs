@@ -11,7 +11,7 @@ namespace TrumpsWallet.DataAccess
                 new Transaction()
                 {
                     Id = 1,
-                    UserID = 1,
+                    userId = 1,
                     AccountID = 1,
                     Date = DateTime.Now,
                     Amount = 2000,
@@ -23,7 +23,7 @@ namespace TrumpsWallet.DataAccess
                 new Transaction()
                 {
                     Id=2,
-                    UserID = 2,
+                    userId = 2,
                     AccountID = 2,
                     Date = DateTime.Now,
                     Amount = 200,
@@ -35,7 +35,7 @@ namespace TrumpsWallet.DataAccess
                 new Transaction()
                 {
                     Id=3,
-                    UserID = 1,
+                    userId = 3,
                     AccountID = 1,
                     Date = DateTime.Now,
                     Amount = 150,
@@ -46,7 +46,7 @@ namespace TrumpsWallet.DataAccess
                 new Transaction()
                 {
                     Id=4,
-                    UserID = 3,
+                    userId = 4,
                     AccountID = 3,
                     Date = DateTime.Now,
                     Amount = 2000,
@@ -58,7 +58,7 @@ namespace TrumpsWallet.DataAccess
                 new Transaction()
                 {
                     Id=5,
-                    UserID = 4,
+                    userId = 4,
                     AccountID = 4,
                     Date = DateTime.Now,
                     Amount = 2000,

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TrumpsWallet.Core.Services.Intefaces;
+using TrumpsWallet.Core.Services.Interfaces;
 using TrumpsWallet.Entities;
 using Microsoft.AspNetCore.Http;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
