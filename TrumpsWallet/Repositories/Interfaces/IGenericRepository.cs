@@ -13,8 +13,8 @@ namespace TrumpsWallet.Repositories.Interfaces
         Task<bool> InsertRange(List<T> entity);
         Task<List<T>> GetAll();
         Task<T> GetById(int Id);
-        void Delete(int Id);
+        Task<bool> Delete(int Id);
         Task<bool> Update(T entity);
-
+       
     }
 }

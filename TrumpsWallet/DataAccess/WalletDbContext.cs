@@ -14,10 +14,10 @@ namespace TrumpsWallet.DataAccess
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.RolesSeed();
-            modelBuilder.UsersSeed();
-            modelBuilder.AccountsSeed();
-            modelBuilder.TransactionsSeed();
+            modelBuilder.RoleDataSeed();
+            modelBuilder.UserDataSeed();
+            modelBuilder.AccountDataSeed();
+            modelBuilder.TransactionDataSeed();
             
 
         }

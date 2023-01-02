@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using TrumpsWallet.DataAccess;
-using TrumpsWallet.Repositories.Interfaces;
-using TrumpsWallet.Repositories;
-using TrumpsWallet.Core.Services.Intefaces;
 using TrumpsWallet.Core.Services;
+using TrumpsWallet.Core.Services.Interfaces;
+using TrumpsWallet.DataAccess;
+using TrumpsWallet.Repositories;
+using TrumpsWallet.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,11 +19,17 @@ var connectionString = builder.Configuration.GetConnectionString("DevConnection"
 //Agrego el DBContext
 builder.Services.AddDbContext<WalletDbContext>(options => options.UseSqlServer(connectionString));
 
+//agrego el servicio de los repositorios
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<ITransactionService, TransactionService>();
+
+
 
 var app = builder.Build();
 

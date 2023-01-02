@@ -3,14 +3,14 @@ using TrumpsWallet.Entities;
 
 namespace TrumpsWallet.DataAccess
 {
-    public static class TransactionsSeeds
+    public static class TransactionSeed
     {
-        public static void TransactionsSeed(this ModelBuilder builder)
+        public static void TransactionDataSeed(this ModelBuilder builder)
         {
             builder.Entity<Transaction>().HasData(
                 new Transaction()
                 {
-                    Id= 1,
+                    Id = 1,
                     userId = 1,
                     AccountID = 1,
                     Date = DateTime.Now,
@@ -35,7 +35,7 @@ namespace TrumpsWallet.DataAccess
                 new Transaction()
                 {
                     Id=3,
-                    userId = 1,
+                    userId = 3,
                     AccountID = 1,
                     Date = DateTime.Now,
                     Amount = 150,
@@ -45,8 +45,8 @@ namespace TrumpsWallet.DataAccess
                 },
                 new Transaction()
                 {
-                    Id =4,
-                    userId = 3,
+                    Id=4,
+                    userId = 4,
                     AccountID = 3,
                     Date = DateTime.Now,
                     Amount = 2000,

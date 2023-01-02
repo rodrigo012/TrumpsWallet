@@ -1,6 +1,6 @@
 ﻿using TrumpsWallet.Entities;
 
-namespace TrumpsWallet.Core.Services.Intefaces
+namespace TrumpsWallet.Core.Services.Interfaces
 {
     public interface ITransactionService
     {

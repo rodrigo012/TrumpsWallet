@@ -3,14 +3,14 @@ using TrumpsWallet.Entities;
 
 namespace TrumpsWallet.DataAccess
 {
-    public static class AccountsSeeds
+    public static class AccountSeed
     {
-        public static void AccountsSeed(this ModelBuilder builder)
+        public static void AccountDataSeed(this ModelBuilder builder)
         {
             builder.Entity<Account>().HasData(
                 new Account()
                 {
-                    Id= 1,
+                    Id=1,
                     creationDate = DateTime.Now,
                     money = 81000,
                     isBlocked = false,
@@ -18,7 +18,7 @@ namespace TrumpsWallet.DataAccess
                 },
                 new Account()
                 {
-                    Id= 2,
+                    Id=2,
                     creationDate = DateTime.Now,
                     money = 30000,
                     isBlocked = true,
@@ -26,7 +26,7 @@ namespace TrumpsWallet.DataAccess
                 },
                 new Account()
                 {
-                    Id = 3,
+                    Id=3,
                     creationDate = DateTime.Now,
                     money = 30000,
                     isBlocked = true,
