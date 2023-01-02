@@ -4,6 +4,7 @@ using TrumpsWallet.Core.Services.Interfaces;
 using TrumpsWallet.DataAccess;
 using TrumpsWallet.Repositories;
 using TrumpsWallet.Repositories.Interfaces;
+using TrumpsWallet.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +30,8 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
+//AutoMapper
+builder.Services.AddAutoMapper(typeof(MapperInitializer));
 
 var app = builder.Build();
 
