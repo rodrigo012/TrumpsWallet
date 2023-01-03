@@ -6,6 +6,9 @@ using TrumpsWallet.Entities;
 using Microsoft.AspNetCore.Http;
 using TrumpsWallet.Repositories.Interfaces;
 using TrumpsWallet.Repositories;
+using TrumpsWallet.Core.DTOs;
+using TrumpsWallet.DataAccess;
+using AutoMapper;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TrumpsWallet.Controllers
@@ -15,12 +18,14 @@ namespace TrumpsWallet.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        //private readonly IMapper _mapper;
+        private readonly WalletDbContext _context;
+        private readonly IMapper _mapper;
         
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, WalletDbContext context, IMapper mapper)
         {
             this._userService = userService;
-            //this._mapper = mapper;
+            _mapper = mapper;
+            _context = context;
         }
 
         // GET: api/<ValuesController>
@@ -61,6 +66,40 @@ namespace TrumpsWallet.Controllers
         {
             await _userService.DeleteById(id);
             return Ok();
+        }
+
+        // Metodo para el logueo de usuarios
+        [HttpPost]
+        [Route("login")]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Login([FromBody] UserDTO userDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                // se busca en la BD la existencia de las credenciales
+                var userList = await _userService.GetAll();
+                var user = (from t in _context.Set<User>() where t.Email.Equals(userDTO.Email) && t.Password.Equals(userDTO.Password) select t).FirstOrDefault();
+                var result = _mapper.Map<UserDTO>(user);
+
+                if (result == null)
+                {
+                    return Unauthorized(userDTO);
+                }
+
+                return Accepted();
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ($"Error Interno del Servidor {0}", ex.Message));
+            }
         }
     }
 }

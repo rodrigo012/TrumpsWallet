@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TrumpsWallet.Core.Models
+namespace TrumpsWallet.Core.DTOs
 {
     public class AccountDTO
     {

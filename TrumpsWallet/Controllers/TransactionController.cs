@@ -2,7 +2,8 @@
 using TrumpsWallet.Core.Services.Interfaces;
 using TrumpsWallet.Entities;
 using Microsoft.AspNetCore.Http;
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using AutoMapper;
+using TrumpsWallet.Core.DTOs;
 
 namespace TrumpsWallet.Controllers
 {
@@ -10,51 +11,116 @@ namespace TrumpsWallet.Controllers
     [ApiController]
     public class TransactionController : ControllerBase
     {
-        private readonly ITransactionService _transactionService;
-        
-        public TransactionController(ITransactionService transactionService)
+        private readonly ITransactionService transactionService;
+        private readonly IMapper mapper;
+        public TransactionController(ITransactionService transactionService, IMapper mapper)
         {
-            this._transactionService = transactionService;
+            this.transactionService = transactionService;
+            this.mapper = mapper;
         }
 
-        // GET: api/<ValuesController>
-        [HttpGet]
-        public async Task<ActionResult<List<Transaction>>> Get()
-        {
-            return await _transactionService.GetAll();
-        }
-
-        // GET api/<ValuesController>/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Transaction>> Get(int id)
-        {
-            return await _transactionService.GetTransaction(id);
-        }
-
-        // POST api/<ValuesController>
         [HttpPost]
-        public async Task<ActionResult> Post(Transaction transaction)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Insert([FromBody] TransactionDTO transactionDTO)
         {
+            if (!ModelState.IsValid)
             {
-                await _transactionService.InsertAsync(transaction);
-                return new CreatedAtRouteResult("getTransaction", new { id = transaction.Id }, transaction);
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var entity = mapper.Map<Transaction>(transactionDTO);
+                await transactionService.Insert(entity);
+                return CreatedAtRoute("GetTransaction", new { id = entity.Id }, entity);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, ($"Error Interno del Servidor {0}", ex.Message));
+            }
+        }
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Get()
+        {
+            try
+            {
+                var entity = await transactionService.GetAllTransactionsAsync();
+                var results = mapper.Map<IList<TransactionDTO>>(entity);
+                return Ok(results);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error Interno de Servidor");
             }
         }
 
-        // PUT api/<ValuesController>/5
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, Transaction transaction)
+        [HttpGet("{id:int}", Name ="GetTransaction")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Get(int id)
         {
-            await _transactionService.UpdateTransaction(id, transaction);
-            return NoContent();
+            try
+            {
+                var entity = await transactionService.GetTransactionAsync(id);
+                var result = mapper.Map<TransactionDTO>(entity);
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, ($"Error Interno del Servidor{0}",ex.Message));
+            }
         }
-
-        // DELETE api/<ValuesController>/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            await _transactionService.DeleteById(id);
-            return Ok();
+            if (id < 1)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var entity = await transactionService.GetTransactionAsync(id);
+                if(entity == null)
+                {
+                    return BadRequest("Los datos no son correctos");
+                }
+                await transactionService.DeleteTransactionAsync(id);
+                return NoContent();
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, ($"Error Interno del Servidor{0}", ex.Message));
+            }
+        }
+        [HttpPut]
+        public async Task<IActionResult> Update(int id, [FromBody] TransactionDTO transactionDTO)
+        {
+            if(!ModelState.IsValid || id < 1)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var entity = await transactionService.GetTransactionAsync(id);
+
+                if (entity == null)
+                {
+                    return BadRequest("Los datos no son correctos.");
+                }
+                mapper.Map(transactionDTO, entity);
+                await transactionService.UpdateTransactionAsync(entity);
+
+                return NoContent();
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, ($"Error interno del Servidor{0}", ex.Message));
+            }
         }
     }
 }
