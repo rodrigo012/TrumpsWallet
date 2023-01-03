@@ -1,4 +1,4 @@
-﻿namespace TrumpsWallet.Core.Models
+﻿namespace TrumpsWallet.Core.DTOs
 {
     public class RoleDto
     {

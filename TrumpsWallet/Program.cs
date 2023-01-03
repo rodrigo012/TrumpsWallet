@@ -13,7 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddControllers();
 
 //obtengo la cadena de conexion
 var connectionString = builder.Configuration.GetConnectionString("DevConnection");

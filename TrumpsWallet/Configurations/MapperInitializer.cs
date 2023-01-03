@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using TrumpsWallet.Core.Models;
+using TrumpsWallet.Core.DTOs;
 using TrumpsWallet.Entities;
 
 namespace TrumpsWallet.Configurations
@@ -10,6 +10,7 @@ namespace TrumpsWallet.Configurations
         public MapperInitializer()
         {
             CreateMap<Account, AccountDTO>().ReverseMap();
+            CreateMap<User, UserDTO>().ReverseMap();
         }
 
     }

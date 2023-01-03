@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TrumpsWallet.Core.Models;
+using TrumpsWallet.Core.DTOs;
 using TrumpsWallet.Core.Services;
 using TrumpsWallet.Core.Services.Interfaces;
 using TrumpsWallet.Entities;
