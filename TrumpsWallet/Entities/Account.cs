@@ -10,7 +10,6 @@ namespace TrumpsWallet.Entities
 
         public DateTime creationDate { get; set; }
 
-        [Column(TypeName = "decimal(18,4)")]
         public float money { get; set; }
 
         public bool isBlocked { get; set; }

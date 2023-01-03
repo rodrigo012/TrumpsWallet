@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TrumpsWallet.Core.Models
 {
-    public class AccountDto
+    public class AccountDTO
     {
-        [Required(ErrorMessage = "Por favor indica fecha de creación")]
         public DateTime creationDate { get; set; }
 
         [Required(ErrorMessage = "Por favor indica la cantidad de dinero")]
+        [Column(TypeName = "decimal(12,2)")]
         public float money { get; set; }
 
         [Required(ErrorMessage = "Por favor indica el estado de la cuenta")]

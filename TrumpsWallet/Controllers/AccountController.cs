@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TrumpsWallet.Core.Models;
 using TrumpsWallet.Core.Services;
@@ -7,55 +8,132 @@ using TrumpsWallet.Entities;
 
 namespace TrumpsWallet.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService accountService;
-        public AccountController(IAccountService accountService)
+        private readonly IMapper mapper;
+        public AccountController(IAccountService accountService, IMapper mapper)
         {
             this.accountService = accountService;
+            this.mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Insert(AccountDto account)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Insert([FromBody] AccountDTO accountDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            else
-            {
 
-                await accountService.Insert(account);
-                return Ok(account);
+            try
+            {
+                var entity = mapper.Map<Account>(accountDTO);
+                await accountService.Insert(entity);
+                return CreatedAtRoute("GetAccount", new { id = entity.Id }, entity);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ($"Error Interno del Servidor {0}", ex.Message));
             }
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<AccountDto>>> Get()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Get()
         {
-            return await accountService.GetAllAccountAsync();
+            try
+            {
+                var entity = await accountService.GetAllAccountAsync();
+                var results = mapper.Map<IList<AccountDTO>>(entity);
+                return Ok(results);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error Interno de Servidor");
+            }
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<AccountDto>> Get(int id)
+        [HttpGet("{id:int}", Name = "GetAccount")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Get(int id)
         {
-            return await accountService.GetAccountAsync(id);
+            try
+            {
+                var entity = await accountService.GetAccountAsync(id);
+                var result = mapper.Map<AccountDTO>(entity);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ($"Error Interno del Servidor {0}", ex.Message));
+            }
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            await accountService.DeleteAccountAsync(id);
-            return Ok();
+            if (id < 1)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var entity = await accountService.GetAccountAsync(id);
+
+                // validar si existe el registro en la base de datos.
+                if (entity == null)
+                {
+                    return BadRequest("Los datos recibidos no son correctos.");
+                }
+
+                await accountService.DeleteAccountAsync(id);
+
+                return NoContent();
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ($"Error Interno del Servidor {0}", ex.Message));
+            }
         }
 
         [HttpPut]
-        public async Task<ActionResult> Update(AccountDto accountDto)
+        public async Task<IActionResult> Update(int id, [FromBody] AccountDTO accountDTO)
         {
-            await accountService.UpdateAccountAsync(accountDto);
-            return Ok();
+            if (!ModelState.IsValid || id < 1)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var entity = await accountService.GetAccountAsync(id);
+
+                // validar si existe el registro en la base de datos.
+                if (entity == null)
+                {
+                    return BadRequest("Los datos recibidos no son correctos.");
+                }
+
+                mapper.Map(accountDTO, entity);
+                await accountService.UpdateAccountAsync(entity);
+
+                return NoContent();
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ($"Error Interno del Servidor {0}", ex.Message));
+            }
         }
     }
 }
