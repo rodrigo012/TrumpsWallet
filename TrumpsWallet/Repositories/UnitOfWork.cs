@@ -2,7 +2,7 @@
 using TrumpsWallet.DataAccess;
 using TrumpsWallet.Entities;
 using TrumpsWallet.Repositories.Interfaces;
-using TrumpsWallet.Entities;
+
 
 namespace TrumpsWallet.Repositories
 {

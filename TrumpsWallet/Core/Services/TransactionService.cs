@@ -12,43 +12,32 @@ namespace TrumpsWallet.Core.Services
         {
             this.unitOfWork = unitOfWork;
         }
-        public async Task<List<Transaction>> GetAll()
+        public async Task<List<Transaction>> GetAllTransactionsAsync()
         {
-            return await unitOfWork.TransactionRepository.GetAll();
+            var result = await unitOfWork.TransactionRepository.GetAll();
+            return result;
         }
-        public async Task<Transaction> GetTransaction(int id)
+        public async Task<Transaction> GetTransactionAsync(int id)
         {
-            return await unitOfWork.TransactionRepository.GetById(id);
+            var result = await unitOfWork.TransactionRepository.GetById(id);
+            return result;
         }
-        public async Task<Transaction> InsertAsync(Transaction transaction)
+        public async Task<Transaction> Insert(Transaction transactionEntity)
         {
-            Transaction newtransaction = new Transaction();
-            newtransaction.Amount = transaction.Amount;
-            newtransaction.Concept = transaction.Concept;
-            newtransaction.Date = transaction.Date;
-            newtransaction.Type = transaction.Type;
-            
-            await unitOfWork.TransactionRepository.Insert(newtransaction);
+            await unitOfWork.TransactionRepository.Insert(transactionEntity);
             await unitOfWork.SaveChangesAsync();
-            return transaction;
+            return transactionEntity;
         }
-        public async Task UpdateTransaction(int id, Transaction transaction)
+        public async Task UpdateTransactionAsync(Transaction editTransaction)
         {
-            if (transaction.Id == id)
-            {
-                unitOfWork.TransactionRepository.Update(transaction);
-                await unitOfWork.SaveChangesAsync();
-            }
+            await unitOfWork.TransactionRepository.Update(editTransaction);
+            unitOfWork.SaveChanges();
         }
-        public async Task DeleteById(int id)
+        public async Task DeleteTransactionAsync(int id)
         {
-            var TransactionDelete = await unitOfWork.TransactionRepository.GetById(id);
+            await unitOfWork.TransactionRepository.Delete(id);
+            await unitOfWork.SaveChangesAsync();
 
-            if(TransactionDelete != null)
-            {
-                  unitOfWork.TransactionRepository.Delete(id);
-                await unitOfWork.SaveChangesAsync();
-            }
         }
     }
 }

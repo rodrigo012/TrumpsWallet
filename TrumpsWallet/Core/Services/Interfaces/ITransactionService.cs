@@ -4,10 +4,10 @@ namespace TrumpsWallet.Core.Services.Interfaces
 {
     public interface ITransactionService
     {
-        Task<List<Transaction>> GetAll();
-        Task<Transaction> GetTransaction(int id);
-        Task<Transaction> InsertAsync(Transaction transaction);
-        Task UpdateTransaction(int id,Transaction transaction);
-        Task DeleteById(int id);
+        Task<List<Transaction>> GetAllTransactionsAsync();
+        Task<Transaction> GetTransactionAsync(int id);
+        Task<Transaction> Insert(Transaction transactionEntity);
+        Task UpdateTransactionAsync(Transaction editTransaction);
+        Task DeleteTransactionAsync(int id);
     }
 }

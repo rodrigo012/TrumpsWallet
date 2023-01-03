@@ -10,6 +10,9 @@ namespace TrumpsWallet.Configurations
         public MapperInitializer()
         {
             CreateMap<Account, AccountDTO>().ReverseMap();
+            CreateMap<Role, RoleDTO>().ReverseMap();
+            CreateMap<Transaction, TransactionDTO>().ReverseMap();
+
             CreateMap<User, UserDTO>().ReverseMap();
         }
 
