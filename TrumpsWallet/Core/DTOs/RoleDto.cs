@@ -1,4 +1,6 @@
-﻿namespace TrumpsWallet.Core.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TrumpsWallet.Core.DTOs
 {
     public class RoleDTO
     {

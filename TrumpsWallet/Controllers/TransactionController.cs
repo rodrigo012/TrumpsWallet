@@ -3,7 +3,7 @@ using TrumpsWallet.Core.Services.Interfaces;
 using TrumpsWallet.Entities;
 using Microsoft.AspNetCore.Http;
 using AutoMapper;
-using TrumpsWallet.Core.Models;
+using TrumpsWallet.Core.DTOs;
 
 namespace TrumpsWallet.Controllers
 {
