@@ -36,7 +36,7 @@ namespace TrumpsWallet.Core.Services
         {
             if (transaction.Id == id)
             {
-                unitOfWork.TransactionRepository.Update(transaction);
+                await unitOfWork.TransactionRepository.Update(transaction);
                 await unitOfWork.SaveChangesAsync();
             }
         }
@@ -46,7 +46,7 @@ namespace TrumpsWallet.Core.Services
 
             if(TransactionDelete != null)
             {
-                  unitOfWork.TransactionRepository.Delete(id);
+                await unitOfWork.TransactionRepository.Delete(id);
                 await unitOfWork.SaveChangesAsync();
             }
         }

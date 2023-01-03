@@ -2,6 +2,9 @@
 using TrumpsWallet.Entities;
 using Microsoft.AspNetCore.Mvc;
 using TrumpsWallet.Core.Services.Interfaces;
+using AutoMapper;
+using TrumpsWallet.Core.Models;
+using TrumpsWallet.Core.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,51 +15,51 @@ namespace TrumpsWallet.Controllers
     public class RoleController : ControllerBase
     {
         private readonly IRoleService roleService;
+        private readonly IMapper mapper;
 
-        public RoleController(IRoleService _service)
+
+        public RoleController(IRoleService _service, IMapper _mapper)
         {
             roleService = _service;
+            mapper = _mapper;
         }
 
-        // GET: api/<RoleController>
+
         [HttpGet]
-        public async Task<List<Role>> Get()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetAll()
         {
-            return await roleService.GetAllRoles();
-        }
-
-        // GET api/<RoleController>/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Role>> Get(int id)
-        {
-            return await roleService.GetById(id);
-        }
-
-        // POST api/<RoleController>
-        [HttpPost]
-        public async Task<ActionResult> Post(Role role)
-        {
+            try
             {
-                await roleService.InsertAsync(role);
-                return new CreatedAtRouteResult("getRole", new { id = role.Id }, role);
+                var roles = await roleService.GetAllRoles();
+                var results = mapper.Map<IList<RoleDTO>>(roles);
+                return Ok(results);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error Interno de Servidor");
             }
         }
 
-        // PUT api/<RoleController>/5
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, Role role)
+
+        [HttpGet("{id:int}", Name = "GetRole")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Get(int id)
         {
-            await roleService.UpdateRole(id, role);
-            return NoContent();
+            try
+            {
+                var example = await roleService.GetById(id);
+                var result = mapper.Map<RoleDTO>(example);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ($"Error Interno del Servidor {0}", ex.Message));
+            }
         }
 
-        // DELETE api/<RoleController>/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
-        {
-            await roleService.DeleteById(id);
-            return Ok();
-        }
 
     }
 }
