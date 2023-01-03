@@ -18,8 +18,6 @@ namespace TrumpsWallet.DataAccess
             modelBuilder.UserDataSeed();
             modelBuilder.AccountDataSeed();
             modelBuilder.TransactionDataSeed();
-            
-
         }
  
         public DbSet<Transaction> Transactions { get; set; }
