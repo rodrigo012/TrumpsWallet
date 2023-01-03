@@ -11,6 +11,7 @@ namespace TrumpsWallet.Configurations
         {
             CreateMap<Account, AccountDTO>().ReverseMap();
             CreateMap<Role, RoleDTO>().ReverseMap();
+            CreateMap<Transaction, TransactionDTO>().ReverseMap();
 
         }
 
