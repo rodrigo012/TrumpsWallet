@@ -12,45 +12,35 @@ namespace TrumpsWallet.Core.Services
         {
             this.unitOfWork = unitOfWork;
         }
-        public async Task<List<User>> GetAll()
+        public async Task<List<User>> GetAllUserAsync()
         {
-            return await unitOfWork.UserRepository.GetAll();
+            var result = await unitOfWork.UserRepository.GetAll();
+            return result;
         }
-        public async Task<User> GetUser(int id)
+        public async Task<User> GetUserAsync(int id)
         {
-            return await unitOfWork.UserRepository.GetById(id);
+            var result = await unitOfWork.UserRepository.GetById(id);
+            return result;
         }
-        public async Task<User> InsertAsync(User user)
-        {
-            //User newuser= new User();
-            //newuser.FirstName = user.FirstName;
-            //newuser.LastName = user.LastName;
-            //newuser.Email = user.Email;
-            //newuser.Password = user.Password;
-            //newuser.Point = user.Point;
 
-            await unitOfWork.UserRepository.Insert(user);
+        public async Task<User> Insert(User userEntity)
+        {
+            await unitOfWork.UserRepository.Insert(userEntity);
             await unitOfWork.SaveChangesAsync();
-            return user;
+            return userEntity;
         }
-        public async Task UpdateUser(int id, User user)
-        {
-            if (user.Id == id)
-            {
-                unitOfWork.UserRepository.Update(user);
-                await unitOfWork.SaveChangesAsync();
-            }
-        }
-        public async Task DeleteById(int id)
-        {
-            var UserDelete = await unitOfWork.UserRepository.GetById(id);
 
-            if(UserDelete != null)
-            {
-                  unitOfWork.UserRepository.Delete(id);
-                await unitOfWork.SaveChangesAsync();
-            }
+        public async Task DeleteUserAsync(int id)
+        {
+            await unitOfWork.UserRepository.Delete(id);
+            await unitOfWork.SaveChangesAsync();
+        }
+
+
+        public async Task UpdateUserAsync(User editUser)
+        {
+            await unitOfWork.UserRepository.Update(editUser);
+            unitOfWork.SaveChanges();
         }
     }
 }
- 

@@ -3,19 +3,29 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TrumpsWallet.Entities
 {
+    [Table("User")]
     public class User : BaseEntity
     {
-        [StringLength(255)]
+        [Column(TypeName = "nvarchar(50)")]
         public string FirstName { get; set; }
-        [StringLength(255)]
+
+
+        [Column(TypeName = "nvarchar(50)")]
         public string LastName { get; set; }
-        [StringLength(255)]
+
+
+        [Column(TypeName = "nvarchar(100)")]
         [EmailAddress]
         public string Email { get; set; }
-        [StringLength(255)]
+
+
+        [Column(TypeName = "nvarchar(50)")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+
         public int Point { get; set; }
+
 
         [ForeignKey("Role")]
         public int RoleId { get; set; }
