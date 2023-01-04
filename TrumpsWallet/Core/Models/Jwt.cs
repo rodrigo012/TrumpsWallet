@@ -15,8 +15,6 @@ namespace TrumpsWallet.Core.Models
 
         public JwtSecurityToken CreateToken(Jwt _jwt, UserDTO userDTO)
         {
-
-            // ASIGNACIÓN : Actualizar el metodo, para asignar los valores id y nombre del usuario.
             var claims = new[] {
                 new Claim(JwtRegisteredClaimNames.Sub, _jwt.Subject),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
@@ -37,7 +35,6 @@ namespace TrumpsWallet.Core.Models
             );
 
             return token;
-
         }
 
         //public static dynamic ValidateToken(ClaimsIdentity identity)
