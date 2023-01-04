@@ -9,6 +9,8 @@ using TrumpsWallet.Repositories;
 using TrumpsWallet.Core.DTOs;
 using TrumpsWallet.DataAccess;
 using AutoMapper;
+using TrumpsWallet.Core.Models;
+using System.IdentityModel.Tokens.Jwt;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TrumpsWallet.Controllers
@@ -20,52 +22,131 @@ namespace TrumpsWallet.Controllers
         private readonly IUserService _userService;
         private readonly WalletDbContext _context;
         private readonly IMapper _mapper;
-        
-        public UserController(IUserService userService, WalletDbContext context, IMapper mapper)
+        private readonly IConfiguration _config;
+        public UserController(IUserService userService, WalletDbContext context, IMapper mapper, IConfiguration config)
         {
             this._userService = userService;
             _mapper = mapper;
             _context = context;
+            _config = config;
         }
 
         // GET: api/<ValuesController>
         [HttpGet]
-        public async Task<ActionResult<List<User>>> Get()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Get()
         {
-            return await _userService.GetAll();
+            try
+            {
+                var entity = await _userService.GetAllUserAsync();
+                var results = _mapper.Map<IList<UserDTO>>(entity);
+                return Ok(results);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error Interno de Servidor");
+            }
         }
 
-        // GET api/<ValuesController>/5
-        [HttpGet("{id}", Name = "GetUser")]
-        public async Task<ActionResult<User>> Get(int id)
+        [HttpGet("{id:int}", Name = "GetUser")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Get(int id)
         {
-            return await _userService.GetUser(id);
+            try
+            {
+                var entity = await _userService.GetUserAsync(id);
+                var result = _mapper.Map<UserDTO>(entity);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ($"Error Interno del Servidor {0}", ex.Message));
+            }
         }
 
         // POST api/<ValuesController>
         [HttpPost]
-        public async Task<ActionResult> Post(User user)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Insert([FromBody] UserDTO userDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            await _userService.InsertAsync(user);
-            return new CreatedAtRouteResult("getUser", new { id = user.Id }, user);
-
-        }
-
-        // PUT api/<ValuesController>/5
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, User user)
-        {
-            await _userService.UpdateUser(id, user);
-            return NoContent();
+            try
+            {
+                var entity = _mapper.Map<User>(userDTO);
+                await _userService.Insert(entity);
+                return CreatedAtRoute("GetUser", new { id = entity.Id }, entity);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ($"Error Interno del Servidor {0}", ex.Message));
+            }
         }
 
         // DELETE api/<ValuesController>/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            await _userService.DeleteById(id);
-            return Ok();
+            if (id < 1)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var entity = await _userService.GetUserAsync(id);
+
+                if (entity == null)
+                {
+                    return BadRequest("Los datos recibidos no son correctos.");
+                }
+
+                await _userService.DeleteUserAsync(id);
+
+                return NoContent();
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ($"Error Interno del Servidor {0}", ex.Message));
+            }
+        }
+
+        // PUT api/<ValuesController>/5
+        [HttpPut]
+        public async Task<IActionResult> Update(int id, [FromBody] UserDTO userDTO)
+        {
+            if (!ModelState.IsValid || id < 1)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var entity = await _userService.GetUserAsync(id);
+
+                if (entity == null)
+                {
+                    return BadRequest("Los datos recibidos no son correctos.");
+                }
+
+                _mapper.Map(userDTO, entity);
+                await _userService.UpdateUserAsync(entity);
+
+                return NoContent();
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ($"Error Interno del Servidor {0}", ex.Message));
+            }
         }
 
         // Metodo para el logueo de usuarios
@@ -83,8 +164,7 @@ namespace TrumpsWallet.Controllers
 
             try
             {
-                // se busca en la BD la existencia de las credenciales
-                var userList = await _userService.GetAll();
+                var userList = await _userService.GetAllUserAsync();
                 var user = (from t in _context.Set<User>() where t.Email.Equals(userDTO.Email) && t.Password.Equals(userDTO.Password) select t).FirstOrDefault();
                 var result = _mapper.Map<UserDTO>(user);
 
@@ -93,7 +173,21 @@ namespace TrumpsWallet.Controllers
                     return Unauthorized(userDTO);
                 }
 
-                return Accepted();
+                // las credenciales de acceso son validas, procedemos a construir el JWT con los valores adecuados.
+
+                // leer los parametros Jwt de appsettings.json y asignar al objeto del tipo JWT.
+                var jwt = _config.GetSection("Jwt").Get<Jwt>();
+
+                // invocar el metodo que contruye la cadena del token.
+                var mitoken = jwt.CreateToken(jwt, result);
+
+                //return new
+                //{
+                //    message = "El Token ha sido creado.",
+                //    success = true,
+                //    result = new JwtSecurityTokenHandler().WriteToken(mitoken) // retornar el cifrado del token.
+                //};
+                return Accepted(new JwtSecurityTokenHandler().WriteToken(mitoken));
 
             }
             catch (Exception ex)

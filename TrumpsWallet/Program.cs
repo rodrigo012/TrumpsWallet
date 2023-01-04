@@ -6,6 +6,9 @@ using TrumpsWallet.Repositories;
 using TrumpsWallet.Repositories.Interfaces;
 using TrumpsWallet.Configurations;
 using TrumpsWallet.Core.Services.Intefaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +37,21 @@ builder.Services.AddSwaggerGen();
 //AutoMapper
 builder.Services.AddAutoMapper(typeof(MapperInitializer));
 
+//Agregando servicio de JWT
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer
+(
+    option => option.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    {
+        ValidateAudience = true,
+        ValidateIssuer = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    }
+);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -44,6 +62,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
