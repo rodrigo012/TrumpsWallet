@@ -26,15 +26,15 @@ namespace TrumpsWallet.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "User",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     Point = table.Column<int>(type: "int", nullable: false),
                     RoleId = table.Column<int>(type: "int", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -42,9 +42,9 @@ namespace TrumpsWallet.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_User", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Role_RoleId",
+                        name: "FK_User_Role_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Role",
                         principalColumn: "Id",
@@ -68,9 +68,9 @@ namespace TrumpsWallet.Migrations
                 {
                     table.PrimaryKey("PK_Account", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Account_Users_userId",
+                        name: "FK_Account_User_userId",
                         column: x => x.userId,
-                        principalTable: "Users",
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -105,23 +105,23 @@ namespace TrumpsWallet.Migrations
             migrationBuilder.InsertData(
                 table: "Role",
                 columns: new[] { "Id", "Description", "IsDeleted", "LastModified", "Name" },
-                values: new object[] { 1, "Usuario Administrador", false, new DateTime(2023, 1, 3, 0, 10, 11, 989, DateTimeKind.Utc).AddTicks(9394), "Admin" });
+                values: new object[] { 1, "Usuario Administrador", false, new DateTime(2023, 1, 4, 15, 27, 19, 628, DateTimeKind.Utc).AddTicks(763), "Admin" });
 
             migrationBuilder.InsertData(
                 table: "Role",
                 columns: new[] { "Id", "Description", "IsDeleted", "LastModified", "Name" },
-                values: new object[] { 2, "Usuario Cliente", false, new DateTime(2023, 1, 3, 0, 10, 11, 989, DateTimeKind.Utc).AddTicks(9397), "Cliente" });
+                values: new object[] { 2, "Usuario Cliente", false, new DateTime(2023, 1, 4, 15, 27, 19, 628, DateTimeKind.Utc).AddTicks(765), "Cliente" });
 
             migrationBuilder.InsertData(
-                table: "Users",
+                table: "User",
                 columns: new[] { "Id", "Email", "FirstName", "IsDeleted", "LastModified", "LastName", "Password", "Point", "RoleId" },
                 values: new object[,]
                 {
-                    { 1, "Franco44305@gmail.com", "Franco", false, new DateTime(2023, 1, 3, 0, 10, 11, 989, DateTimeKind.Utc).AddTicks(9531), "Villarreal", "123456789", 7, 1 },
-                    { 2, "Yelfran@gmail.com", "Yelfran", false, new DateTime(2023, 1, 3, 0, 10, 11, 989, DateTimeKind.Utc).AddTicks(9533), "Giuseppe", "Lion222", 5, 2 },
-                    { 3, "RodrigoRoman@gmail.com", "Rodrigo", false, new DateTime(2023, 1, 3, 0, 10, 11, 989, DateTimeKind.Utc).AddTicks(9535), "Roman", "LeoMessi2022", 4, 1 },
-                    { 4, "ManzanelliLuciano@gmail.com", "Luciano", false, new DateTime(2023, 1, 3, 0, 10, 11, 989, DateTimeKind.Utc).AddTicks(9535), "Manzanelli", "LM1830", 6, 2 },
-                    { 5, "DaniDepablos@gmail.com", "Daniel", false, new DateTime(2023, 1, 3, 0, 10, 11, 989, DateTimeKind.Utc).AddTicks(9536), "Depablos", "Mango207", 3, 1 }
+                    { 1, "Franco44305@gmail.com", "Franco", false, new DateTime(2023, 1, 4, 15, 27, 19, 628, DateTimeKind.Utc).AddTicks(885), "Villarreal", "123456789", 7, 1 },
+                    { 2, "Yelfran@gmail.com", "Yelfran", false, new DateTime(2023, 1, 4, 15, 27, 19, 628, DateTimeKind.Utc).AddTicks(887), "Giuseppe", "Lion222", 5, 2 },
+                    { 3, "RodrigoRoman@gmail.com", "Rodrigo", false, new DateTime(2023, 1, 4, 15, 27, 19, 628, DateTimeKind.Utc).AddTicks(889), "Roman", "LeoMessi2022", 4, 1 },
+                    { 4, "ManzanelliLuciano@gmail.com", "Luciano", false, new DateTime(2023, 1, 4, 15, 27, 19, 628, DateTimeKind.Utc).AddTicks(890), "Manzanelli", "LM1830", 6, 2 },
+                    { 5, "DaniDepablos@gmail.com", "Daniel", false, new DateTime(2023, 1, 4, 15, 27, 19, 628, DateTimeKind.Utc).AddTicks(890), "Depablos", "Mango207", 3, 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -129,11 +129,11 @@ namespace TrumpsWallet.Migrations
                 columns: new[] { "Id", "IsDeleted", "LastModified", "creationDate", "isBlocked", "money", "userId" },
                 values: new object[,]
                 {
-                    { 1, false, new DateTime(2023, 1, 3, 0, 10, 11, 989, DateTimeKind.Utc).AddTicks(9766), new DateTime(2023, 1, 2, 21, 10, 11, 989, DateTimeKind.Local).AddTicks(9771), false, 81000f, 1 },
-                    { 2, false, new DateTime(2023, 1, 3, 0, 10, 11, 989, DateTimeKind.Utc).AddTicks(9787), new DateTime(2023, 1, 2, 21, 10, 11, 989, DateTimeKind.Local).AddTicks(9788), true, 30000f, 2 },
-                    { 3, false, new DateTime(2023, 1, 3, 0, 10, 11, 989, DateTimeKind.Utc).AddTicks(9789), new DateTime(2023, 1, 2, 21, 10, 11, 989, DateTimeKind.Local).AddTicks(9789), true, 30000f, 3 },
-                    { 4, false, new DateTime(2023, 1, 3, 0, 10, 11, 989, DateTimeKind.Utc).AddTicks(9790), new DateTime(2023, 1, 2, 21, 10, 11, 989, DateTimeKind.Local).AddTicks(9790), true, 30000f, 4 },
-                    { 5, false, new DateTime(2023, 1, 3, 0, 10, 11, 989, DateTimeKind.Utc).AddTicks(9791), new DateTime(2023, 1, 2, 21, 10, 11, 989, DateTimeKind.Local).AddTicks(9791), false, 15000f, 5 }
+                    { 1, false, new DateTime(2023, 1, 4, 15, 27, 19, 628, DateTimeKind.Utc).AddTicks(963), new DateTime(2023, 1, 4, 12, 27, 19, 628, DateTimeKind.Local).AddTicks(967), false, 81000f, 1 },
+                    { 2, false, new DateTime(2023, 1, 4, 15, 27, 19, 628, DateTimeKind.Utc).AddTicks(982), new DateTime(2023, 1, 4, 12, 27, 19, 628, DateTimeKind.Local).AddTicks(983), true, 30000f, 2 },
+                    { 3, false, new DateTime(2023, 1, 4, 15, 27, 19, 628, DateTimeKind.Utc).AddTicks(984), new DateTime(2023, 1, 4, 12, 27, 19, 628, DateTimeKind.Local).AddTicks(984), true, 30000f, 3 },
+                    { 4, false, new DateTime(2023, 1, 4, 15, 27, 19, 628, DateTimeKind.Utc).AddTicks(985), new DateTime(2023, 1, 4, 12, 27, 19, 628, DateTimeKind.Local).AddTicks(985), true, 30000f, 4 },
+                    { 5, false, new DateTime(2023, 1, 4, 15, 27, 19, 628, DateTimeKind.Utc).AddTicks(986), new DateTime(2023, 1, 4, 12, 27, 19, 628, DateTimeKind.Local).AddTicks(986), false, 15000f, 5 }
                 });
 
             migrationBuilder.InsertData(
@@ -141,11 +141,11 @@ namespace TrumpsWallet.Migrations
                 columns: new[] { "Id", "AccountID", "Amount", "Concept", "Date", "IsDeleted", "LastModified", "Type", "toAccountID", "userId" },
                 values: new object[,]
                 {
-                    { 1, 1, 2000m, "Transferencia", new DateTime(2023, 1, 2, 21, 10, 11, 989, DateTimeKind.Local).AddTicks(9826), false, new DateTime(2023, 1, 3, 0, 10, 11, 989, DateTimeKind.Utc).AddTicks(9826), "Payment", 10, 1 },
-                    { 2, 2, 200m, "Transferencia", new DateTime(2023, 1, 2, 21, 10, 11, 989, DateTimeKind.Local).AddTicks(9832), false, new DateTime(2023, 1, 3, 0, 10, 11, 989, DateTimeKind.Utc).AddTicks(9832), "Payment", 3, 2 },
-                    { 3, 1, 150m, "Recarga", new DateTime(2023, 1, 2, 21, 10, 11, 989, DateTimeKind.Local).AddTicks(9834), false, new DateTime(2023, 1, 3, 0, 10, 11, 989, DateTimeKind.Utc).AddTicks(9833), "Topup", 0, 3 },
-                    { 4, 3, 2000m, "Transferencia", new DateTime(2023, 1, 2, 21, 10, 11, 989, DateTimeKind.Local).AddTicks(9835), false, new DateTime(2023, 1, 3, 0, 10, 11, 989, DateTimeKind.Utc).AddTicks(9834), "Payment", 1, 4 },
-                    { 5, 4, 2000m, "Recarga", new DateTime(2023, 1, 2, 21, 10, 11, 989, DateTimeKind.Local).AddTicks(9836), false, new DateTime(2023, 1, 3, 0, 10, 11, 989, DateTimeKind.Utc).AddTicks(9836), "Topup", 0, 4 }
+                    { 1, 1, 2000m, "Transferencia", new DateTime(2023, 1, 4, 12, 27, 19, 628, DateTimeKind.Local).AddTicks(1006), false, new DateTime(2023, 1, 4, 15, 27, 19, 628, DateTimeKind.Utc).AddTicks(1006), "Payment", 10, 1 },
+                    { 2, 2, 200m, "Transferencia", new DateTime(2023, 1, 4, 12, 27, 19, 628, DateTimeKind.Local).AddTicks(1012), false, new DateTime(2023, 1, 4, 15, 27, 19, 628, DateTimeKind.Utc).AddTicks(1011), "Payment", 3, 2 },
+                    { 3, 1, 150m, "Recarga", new DateTime(2023, 1, 4, 12, 27, 19, 628, DateTimeKind.Local).AddTicks(1013), false, new DateTime(2023, 1, 4, 15, 27, 19, 628, DateTimeKind.Utc).AddTicks(1013), "Topup", 0, 3 },
+                    { 4, 3, 2000m, "Transferencia", new DateTime(2023, 1, 4, 12, 27, 19, 628, DateTimeKind.Local).AddTicks(1015), false, new DateTime(2023, 1, 4, 15, 27, 19, 628, DateTimeKind.Utc).AddTicks(1014), "Payment", 1, 4 },
+                    { 5, 4, 2000m, "Recarga", new DateTime(2023, 1, 4, 12, 27, 19, 628, DateTimeKind.Local).AddTicks(1016), false, new DateTime(2023, 1, 4, 15, 27, 19, 628, DateTimeKind.Utc).AddTicks(1016), "Topup", 0, 4 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -159,8 +159,8 @@ namespace TrumpsWallet.Migrations
                 column: "AccountID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_RoleId",
-                table: "Users",
+                name: "IX_User_RoleId",
+                table: "User",
                 column: "RoleId");
         }
 
@@ -173,7 +173,7 @@ namespace TrumpsWallet.Migrations
                 name: "Account");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "Role");
