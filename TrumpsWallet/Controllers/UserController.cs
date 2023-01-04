@@ -11,6 +11,8 @@ using TrumpsWallet.DataAccess;
 using AutoMapper;
 using TrumpsWallet.Core.Models;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TrumpsWallet.Controllers
@@ -104,12 +106,6 @@ namespace TrumpsWallet.Controllers
                 // invocar el metodo que contruye la cadena del token.
                 var mitoken = jwt.CreateToken(jwt, result);
 
-                //return new
-                //{
-                //    message = "El Token ha sido creado.",
-                //    success = true,
-                //    result = new JwtSecurityTokenHandler().WriteToken(mitoken) // retornar el cifrado del token.
-                //};
                 return Accepted(new JwtSecurityTokenHandler().WriteToken(mitoken));
 
             }
@@ -118,5 +114,40 @@ namespace TrumpsWallet.Controllers
                 return StatusCode(500, ($"Error Interno del Servidor {0}", ex.Message));
             }
         }
+
+
+        //[HttpPost]
+        //[Authorize]
+        //[Route("authorize")]
+        //public dynamic Authorize()
+        //{
+
+        //    var identity = HttpContext.User.Identity as ClaimsIdentity;
+
+        //    var _token = Jwt.ValidateToken(identity);
+
+        //    if (!_token.success) return _token;
+
+        //    Usuario usuario = _token.result;
+
+        //    if (usuario.Rol != "admin")
+        //    {
+        //        return new
+        //        {
+        //            message = "Rol no autorizado",
+        //            success = false,
+        //            result = ""
+        //        };
+        //    }
+
+        //    return new
+        //    {
+        //        message = "Rol autorizado",
+        //        success = true,
+        //        result = ""
+        //    };
+
+        //}
+
     }
 }
