@@ -9,6 +9,8 @@ using TrumpsWallet.Repositories;
 using TrumpsWallet.Core.DTOs;
 using TrumpsWallet.DataAccess;
 using AutoMapper;
+using TrumpsWallet.Core.Models;
+using System.IdentityModel.Tokens.Jwt;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TrumpsWallet.Controllers
@@ -20,12 +22,13 @@ namespace TrumpsWallet.Controllers
         private readonly IUserService _userService;
         private readonly WalletDbContext _context;
         private readonly IMapper _mapper;
-        
-        public UserController(IUserService userService, WalletDbContext context, IMapper mapper)
+        private readonly IConfiguration _config;
+        public UserController(IUserService userService, WalletDbContext context, IMapper mapper, IConfiguration config)
         {
             this._userService = userService;
             _mapper = mapper;
             _context = context;
+            _config = config;
         }
 
         // GET: api/<ValuesController>
@@ -93,7 +96,21 @@ namespace TrumpsWallet.Controllers
                     return Unauthorized(userDTO);
                 }
 
-                return Accepted();
+                // las credenciales de acceso son validas, procedemos a construir el JWT con los valores adecuados.
+
+                // leer los parametros Jwt de appsettings.json y asignar al objeto del tipo JWT.
+                var jwt = _config.GetSection("Jwt").Get<Jwt>();
+
+                // invocar el metodo que contruye la cadena del token.
+                var mitoken = jwt.CreateToken(jwt, result);
+
+                //return new
+                //{
+                //    message = "El Token ha sido creado.",
+                //    success = true,
+                //    result = new JwtSecurityTokenHandler().WriteToken(mitoken) // retornar el cifrado del token.
+                //};
+                return Accepted(new JwtSecurityTokenHandler().WriteToken(mitoken));
 
             }
             catch (Exception ex)
