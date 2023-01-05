@@ -168,9 +168,9 @@ namespace TrumpsWallet.Controllers
             {
                 var userList = await _userService.GetAllUserAsync();
                 var user = (from t in _context.Set<User>() where t.Email.Equals(userDTO.Email) && t.Password.Equals(userDTO.Password) select t).FirstOrDefault();
-                var result = _mapper.Map<UserDTO>(user);
+                //var result = _mapper.Map<UserDTO>(user);
 
-                if (result == null)
+                if (user == null)
                 {
                     return Unauthorized(userDTO);
                 }
@@ -181,7 +181,7 @@ namespace TrumpsWallet.Controllers
                 var jwt = _config.GetSection("Jwt").Get<Jwt>();
 
                 // invocar el metodo que contruye la cadena del token.
-                var mitoken = jwt.CreateToken(jwt, result);
+                var mitoken = jwt.CreateToken(jwt, user);
 
                 return Accepted(new JwtSecurityTokenHandler().WriteToken(mitoken));
 
@@ -193,38 +193,22 @@ namespace TrumpsWallet.Controllers
         }
 
 
-        //[HttpPost]
-        //[Authorize]
-        //[Route("authorize")]
-        //public dynamic Authorize()
-        //{
+        [HttpPost]
+        [Authorize]
+        [Route("authorize")]
+        public dynamic Authorize()
+        {
 
-        //    var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
 
-        //    var _token = Jwt.ValidateToken(identity);
+            var _token = Jwt.ValidateToken(identity, _context);
 
-        //    if (!_token.success) return _token;
+            if (!_token.success) return _token;
 
-        //    Usuario usuario = _token.result;
+            User user = _token.result;
 
-        //    if (usuario.Rol != "admin")
-        //    {
-        //        return new
-        //        {
-        //            message = "Rol no autorizado",
-        //            success = false,
-        //            result = ""
-        //        };
-        //    }
+            return user;
 
-        //    return new
-        //    {
-        //        message = "Rol autorizado",
-        //        success = true,
-        //        result = ""
-        //    };
-
-        //}
-
+        }
     }
 }

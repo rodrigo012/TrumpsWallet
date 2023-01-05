@@ -126,7 +126,7 @@ namespace TrumpsWallet.Controllers
 
                 mapper.Map(accountDTO, entity);
                 await accountService.UpdateAccountAsync(entity);
-
+                
                 return NoContent();
 
             }
@@ -134,6 +134,77 @@ namespace TrumpsWallet.Controllers
             {
                 return StatusCode(500, ($"Error Interno del Servidor {0}", ex.Message));
             }
+        }
+
+        // Creación de endpoints de tipo operaciones
+        [Route("Depositar")]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DepositAccount([FromBody] AccountDTO accountDTO)
+        {
+            HttpClient client = new HttpClient();
+            //Hacer...
+            /*
+                Story # 40
+                COMO usuario standard 
+                QUIERO realizar un depósito en mi cuenta
+                PARA aumentar el saldo de la misma
+ 
+                Criterios de aceptación: 
+                POST /accounts/{id}
+
+                se deberá validar el número de cuenta correspondiente al id del usuario (obtenido del token) 
+                y aumentar el saldo de la misma según el importe recibido. 
+                Adicionalmente se debe loguear la operación en la entidad Transactions.
+             */
+            try
+            {
+                var response = await client.GetAsync("http://api/User/Authorize"); // Simulando el Id del usuario (obtenido del token).
+                //if (response.IsSuccessStatusCode)
+                //{
+                //    var user = await response.Content.ReadAsStringAsync();
+                //}
+                
+                if (accountDTO.money <= 0)  // validar el monto a depositar.
+                {
+                    return BadRequest("El monto del deposito no es valido.");
+                }
+                else
+                {
+                    var account = await accountService.GetAccountAsync(1);
+                    if (account == null)    // validar si existe la cuenta asociada al Id usuario.
+                    {
+                        return BadRequest("Usuario no tiene una cuenta disponible.");
+                    }
+                    if (account.isBlocked) // validar si la cuenta esta activa.
+                    {
+                        return BadRequest("La cuenta se encuentra bloqueada.");
+                    }
+                    // incrementar el monto de la cuenta.
+                    account.money += accountDTO.money;
+                    Transaction trx = new Transaction()
+                    {
+                        //account_id = account.Id,
+                        //to_account_id = account.Id,
+                        //user_id = account.user_id,
+                        //amount = accountDTO.money,
+                        //type = TOPUP,
+                        //concept = "Deposito en Cuenta",
+                        //date = DateTime.Now
+                    };
+                    //_unitOfWork.Accounts.Update(account);
+                    //await _unitOfWork.Transactions.Insert(trx);
+                    //await _unitOfWork.Save();
+                }
+            }
+            catch (Exception)
+            {
+                // Colocar aqui la respuesta de error. Igual a los otros ActionResult.
+                throw;
+            }
+            return Ok();
         }
     }
 }
