@@ -2,7 +2,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using TrumpsWallet.Core.DTOs;
+using TrumpsWallet.DataAccess;
+using TrumpsWallet.Entities;
 
 namespace TrumpsWallet.Core.Models
 {
@@ -13,14 +14,14 @@ namespace TrumpsWallet.Core.Models
         public string Audience { get; set; }
         public string Subject { get; set; }
 
-        public JwtSecurityToken CreateToken(Jwt _jwt, UserDTO userDTO)
+        public JwtSecurityToken CreateToken(Jwt _jwt, User user)
         {
             var claims = new[] {
                 new Claim(JwtRegisteredClaimNames.Sub, _jwt.Subject),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                new Claim("email", userDTO.Email),
-                new Claim("password", userDTO.Password)
+                new Claim("id", user.Email),
+                new Claim("password", user.Password)
             };
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Key));
@@ -37,43 +38,40 @@ namespace TrumpsWallet.Core.Models
             return token;
         }
 
-        //public static dynamic ValidateToken(ClaimsIdentity identity)
-        //{
-        //    if (identity.Claims.Count() == 0)
-        //    {
-        //        return new
-        //        {
-        //            message = "El token no es valido",
-        //            success = false,
-        //            result = ""
-        //        };
-        //    }
-
-        //    // leer el valor del claims Id.
-        //    var id = identity.Claims.FirstOrDefault(x => x.Type == "id").Value;
-
-        //    Usuario usuario = Usuario
-        //                      .GetUsuarios()
-        //                      .FirstOrDefault(x => x.Id == id);
-
-        //    if (usuario == null)
-        //    {
-        //        return new
-        //        {
-        //            message = "Usuario no es valido",
-        //            success = false,
-        //            result = ""
-        //        };
-        //    }
-        //    else
-        //    {
-        //        return new
-        //        {
-        //            message = "Usuario es valido",
-        //            success = true,
-        //            result = usuario
-        //        };
+        public static dynamic ValidateToken(ClaimsIdentity identity, WalletDbContext context)
+        {
+            if (identity.Claims.Count() == 0)
+            {
+                return new
+                {
+                    message = "El token no es valido",
+                    success = false,
+                    result = ""
+                };
             }
-        //}
-    //}
+
+            // leer el valor del claims
+            var id = identity.Claims.FirstOrDefault(x => x.Type == "id").Value;
+            var user = (from t in context.Set<User>() where t.Email.Equals(id) select t).FirstOrDefault();
+
+            if (user == null)
+            {
+                return new
+                {
+                    message = "Usuario no es valido",
+                    success = false,
+                    result = ""
+                };
+            }
+            else
+            {
+                return new
+                {
+                    message = "Usuario es valido",
+                    success = true,
+                    result = user
+                };
+            }
+        }
+    }
 }
