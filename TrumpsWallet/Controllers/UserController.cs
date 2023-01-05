@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using TrumpsWallet.Core.DTOs;
 using TrumpsWallet.Core.Models;
@@ -26,6 +27,15 @@ namespace TrumpsWallet.Controllers
         }
 
         // GET: api/<ValuesController>
+        /// <summary>
+        /// Obtiene una lista de Usuarios.
+        /// </summary>
+        /// <remarks>
+        /// Obtiene una lista de Cuentas.
+        /// </remarks>
+        /// <response code="200">OK. Devuelve una lista de cuentas.</response>        
+        /// <response code="500">InternalServerError, Error del servidor.</response>
+        /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -43,6 +53,16 @@ namespace TrumpsWallet.Controllers
             }
         }
 
+        // GET api/<ValuesController>
+        /// <summary>
+        /// Obtiene el Usuario especificado.
+        /// </summary>
+        /// <remarks>
+        /// Obtiene el Usuario especificado.
+        /// </remarks>
+        /// <response code="200">OK. Devuelve el usuario especificado.</response>        
+        /// <response code="500">InternalServerError, Error del servidor.</response>
+        /// <returns></returns>
         [HttpGet("{id:int}", Name = "GetUser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -61,6 +81,27 @@ namespace TrumpsWallet.Controllers
         }
 
         // POST api/<ValuesController>
+        /// <summary>
+        /// Crea un Usuario y lo añade a la Base de Datos.
+        /// </summary>
+        /// <remarks>
+        /// Crea un Usuario y lo añade a la Base de Datos.
+        /// 
+        /// Sample Request:
+        /// 
+        ///     Form-Data
+        ///     {
+        ///        "id": "Numero de identificacion del usuario",
+        ///        "firstName": "Nombre",
+        ///        "lastName": "Apellido",
+        ///        "email": "Email del usuario: user@example.com",
+        ///        "password": "Clave de acceso",
+        ///        "point": 0
+        ///     }
+        /// </remarks>
+        /// <response code="204">OK. Agrega la nueva cuenta a la base de datos.</response>        
+        /// <response code="400">BadRequest. Ha ocurrido un error y no se pudo llevar a cabo la peticion.</response>
+        /// <response code="500">InternalServerError, Error del servidor.</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -84,36 +125,17 @@ namespace TrumpsWallet.Controllers
             }
         }
 
-        // DELETE api/<ValuesController>/5
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            if (id < 1)
-            {
-                return BadRequest();
-            }
-
-            try
-            {
-                var entity = await _userService.GetUserAsync(id);
-
-                if (entity == null)
-                {
-                    return BadRequest("Los datos recibidos no son correctos.");
-                }
-
-                await _userService.DeleteUserAsync(id);
-
-                return NoContent();
-
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ($"Error Interno del Servidor {0}", ex.Message));
-            }
-        }
-
         // PUT api/<ValuesController>/5
+        /// <summary>
+        /// Actualiza un Usuario en la Base de Datos.
+        /// </summary>
+        /// <remarks>
+        /// Actualiza un Usuario en la Base de Datos.
+        /// </remarks>
+        /// <response code="200">OK. Actualiza el usuario en la base de datos.</response>        
+        /// <response code="400">BadRequest. Ha ocurrido un error y no se pudo llevar a cabo la peticion.</response>
+        /// <response code="500">InternalServerError, Error del servidor.</response>
+        /// <response code="404">NotFound. No se ha encontrado el objeto solicitado.</response>
         [HttpPut]
         public async Task<IActionResult> Update(int id, [FromBody] UserDTO userDTO)
         {
@@ -148,7 +170,67 @@ namespace TrumpsWallet.Controllers
             }
         }
 
+        // DELETE api/<ValuesController>/5
+        /// <summary>
+        /// Elimina un Usuario y lo quita de la Base de Datos a través de un Id.
+        /// </summary>
+        /// <remarks>
+        /// Elimina un Usuario y lo quita de la Base de Datos a través de un Id.
+        /// </remarks>
+        /// <response code="200">OK. Elimina la cuenta de la base de datos.</response>        
+        /// <response code="400">BadRequest. Ha ocurrido un error y no se pudo llevar a cabo la peticion.</response>
+        /// <response code="500">InternalServerError, Error del servidor</response>
+        /// <response code="404">NotFound. No se ha encontrado el objeto solicitado.</response>
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id < 1)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var entity = await _userService.GetUserAsync(id);
+
+                if (entity == null)
+                {
+                    return BadRequest("Los datos recibidos no son correctos.");
+                }
+
+                await _userService.DeleteUserAsync(id);
+
+                return NoContent();
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ($"Error Interno del Servidor {0}", ex.Message));
+            }
+        }
+
+
+
         // Metodo para el logueo de usuarios
+        /// <summary>
+        /// Verifica la informacion de los usuarios registrados.
+        /// </summary>
+        /// <returns>Retorna el JwtToken</returns>
+        /// <remarks>
+        /// La informacion solicitada es
+        /// 
+        /// Sample request:
+        /// 
+        ///     POST / LOGIN
+        ///     {
+        ///         "email": "User@email.com",  *Required
+        ///         "password": "ExamplePassword"  *Required
+        ///     }
+        /// 
+        /// </remarks>
+        /// <response code="200">Retorna el JWT.</response>        
+        /// <response code="400">BadRequest. Formato del objeto incorrecto.</response>
+        /// <response code="500">InternalServerError, Error del servidor</response>
         [HttpPost]
         [Route("login")]
         [ProducesResponseType(StatusCodes.Status202Accepted)]
@@ -180,7 +262,19 @@ namespace TrumpsWallet.Controllers
                 // invocar el metodo que contruye la cadena del token.
                 var mitoken = jwt.CreateToken(jwt, result);
 
-                return Accepted(new JwtSecurityTokenHandler().WriteToken(mitoken));
+                //return new
+                //{
+                //    message = "Token creado",
+                //    success = true,
+                //    result = new JwtSecurityTokenHandler().WriteToken(mitoken)
+                //};
+
+                return Accepted(new
+                {
+                    message = "Token creado",
+                    success = true,
+                    result = new JwtSecurityTokenHandler().WriteToken(mitoken)
+                });
 
             }
             catch (Exception ex)
