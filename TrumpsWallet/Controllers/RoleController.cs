@@ -1,12 +1,7 @@
-﻿using TrumpsWallet.Core;
-using TrumpsWallet.Entities;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using TrumpsWallet.Core.Services.Interfaces;
-using AutoMapper;
-using TrumpsWallet.Core.Services;
 using TrumpsWallet.Core.DTOs;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using TrumpsWallet.Core.Services.Interfaces;
 
 namespace TrumpsWallet.Controllers
 {

@@ -9,7 +9,6 @@ namespace TrumpsWallet.Core.Services
 {
     public class RoleService : IRoleService
     {
-        private WalletDbContext context;
 
         private readonly IUnitOfWork unitOfWork;
         public RoleService(IUnitOfWork unitOfWork)
@@ -41,7 +40,7 @@ namespace TrumpsWallet.Core.Services
         {
             if (role.Id == id)
             {
-                unitOfWork.RoleRepository.Update(role);
+                await unitOfWork.RoleRepository.Update(role);
                 await unitOfWork.SaveChangesAsync();
             }
         }
@@ -52,7 +51,7 @@ namespace TrumpsWallet.Core.Services
 
             if (RoleDelete != null)
             {
-                unitOfWork.RoleRepository.Delete(id);
+                await unitOfWork.RoleRepository.Delete(id);
                 await unitOfWork.SaveChangesAsync();
             }
         }

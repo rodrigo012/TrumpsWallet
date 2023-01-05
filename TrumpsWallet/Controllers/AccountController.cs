@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TrumpsWallet.Core.DTOs;
-using TrumpsWallet.Core.Services;
 using TrumpsWallet.Core.Services.Interfaces;
 using TrumpsWallet.Entities;
 
@@ -124,7 +122,10 @@ namespace TrumpsWallet.Controllers
                     return BadRequest("Los datos recibidos no son correctos.");
                 }
 
-                mapper.Map(accountDTO, entity);
+                // actualizar los valores de campos.
+                entity.isBlocked = accountDTO.isBlocked == true ? accountDTO.isBlocked : entity.isBlocked;
+                entity.money = accountDTO.money == 0 ? entity.money : accountDTO.money;
+
                 await accountService.UpdateAccountAsync(entity);
 
                 return NoContent();

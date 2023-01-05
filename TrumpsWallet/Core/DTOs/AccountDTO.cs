@@ -5,6 +5,8 @@ namespace TrumpsWallet.Core.DTOs
 {
     public class AccountDTO
     {
+        public int Id { get; set; }
+
         public DateTime creationDate { get; set; }
 
         [Required(ErrorMessage = "Por favor indica la cantidad de dinero")]

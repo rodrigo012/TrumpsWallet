@@ -1,19 +1,11 @@
-﻿//using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using TrumpsWallet.Core.Services.Intefaces;
-using TrumpsWallet.Entities;
-//using TrumpsWallet.Core.Models;
-using Microsoft.AspNetCore.Http;
-using TrumpsWallet.Repositories.Interfaces;
-using TrumpsWallet.Repositories;
-using TrumpsWallet.Core.DTOs;
-using TrumpsWallet.DataAccess;
-using AutoMapper;
-using TrumpsWallet.Core.Models;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using TrumpsWallet.Core.DTOs;
+using TrumpsWallet.Core.Models;
+using TrumpsWallet.Core.Services.Intefaces;
+using TrumpsWallet.DataAccess;
+using TrumpsWallet.Entities;
 
 namespace TrumpsWallet.Controllers
 {
@@ -139,7 +131,12 @@ namespace TrumpsWallet.Controllers
                     return BadRequest("Los datos recibidos no son correctos.");
                 }
 
-                _mapper.Map(userDTO, entity);
+                // actualizar los valores de los atributos.
+                entity.FirstName = userDTO.FirstName == null ? entity.FirstName : userDTO.FirstName;
+                entity.LastName = userDTO.LastName == null ? entity.LastName : userDTO.LastName;
+                entity.Password = userDTO.Password == null ? entity.Password : userDTO.Password;
+                entity.Email = userDTO.Email == null ? entity.Email : userDTO.Email;
+
                 await _userService.UpdateUserAsync(entity);
 
                 return NoContent();
@@ -191,40 +188,6 @@ namespace TrumpsWallet.Controllers
                 return StatusCode(500, ($"Error Interno del Servidor {0}", ex.Message));
             }
         }
-
-
-        //[HttpPost]
-        //[Authorize]
-        //[Route("authorize")]
-        //public dynamic Authorize()
-        //{
-
-        //    var identity = HttpContext.User.Identity as ClaimsIdentity;
-
-        //    var _token = Jwt.ValidateToken(identity);
-
-        //    if (!_token.success) return _token;
-
-        //    Usuario usuario = _token.result;
-
-        //    if (usuario.Rol != "admin")
-        //    {
-        //        return new
-        //        {
-        //            message = "Rol no autorizado",
-        //            success = false,
-        //            result = ""
-        //        };
-        //    }
-
-        //    return new
-        //    {
-        //        message = "Rol autorizado",
-        //        success = true,
-        //        result = ""
-        //    };
-
-        //}
 
     }
 }

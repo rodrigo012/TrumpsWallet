@@ -4,6 +4,8 @@ namespace TrumpsWallet.Core.DTOs
 {
     public class RoleDTO
     {
+        public int Id { get; set; }
+
         [Required]
         [StringLength(maximumLength: 50, ErrorMessage = "El campo Nombre excede de su longitud.")]
         public string Name { get; set; }

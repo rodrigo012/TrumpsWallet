@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using TrumpsWallet.Core.DTOs;
 using TrumpsWallet.Core.Services.Interfaces;
 using TrumpsWallet.Entities;
-using Microsoft.AspNetCore.Http;
-using AutoMapper;
-using TrumpsWallet.Core.DTOs;
 
 namespace TrumpsWallet.Controllers
 {
@@ -48,9 +47,12 @@ namespace TrumpsWallet.Controllers
         {
             try
             {
+
                 var entity = await transactionService.GetAllTransactionsAsync();
                 var results = mapper.Map<IList<TransactionDTO>>(entity);
+
                 return Ok(results);
+
             }
             catch (Exception)
             {
