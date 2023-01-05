@@ -5,6 +5,9 @@ using TrumpsWallet.Core.Services.Interfaces;
 
 namespace TrumpsWallet.Controllers
 {
+    /// <summary>
+    /// WebApi Gestion de Activities
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class RoleController : ControllerBase
@@ -20,9 +23,20 @@ namespace TrumpsWallet.Controllers
         }
 
 
-        [HttpGet]
+
+        // GET: /roles
+        /// <summary>
+        /// Obtiene una lista de Roles.
+        /// </summary>
+        /// <remarks>
+        /// Obtiene una lista de Roles.
+        /// </remarks>
+        /// <response code="200">OK. Devuelve una lista de Roles.</response>        
+        /// <response code="500">InternalServerError, Error del servidor.</response>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -38,6 +52,17 @@ namespace TrumpsWallet.Controllers
         }
 
 
+
+        // GET: /roles/id
+        /// <summary>
+        /// Obtiene el Rol especificado.
+        /// </summary>
+        /// <remarks>
+        /// Obtiene el Rol especificado.
+        /// </remarks>
+        /// <response code="200">OK. Devuelve el Rol especificado.</response>        
+        /// <response code="500">InternalServerError, Error del servidor.</response>
+        /// <returns></returns>
         [HttpGet("{id:int}", Name = "GetRole")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
