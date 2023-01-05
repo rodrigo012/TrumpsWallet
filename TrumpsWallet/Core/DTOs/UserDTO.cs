@@ -6,7 +6,6 @@ namespace TrumpsWallet.Core.DTOs
 {
     public class UserDTO
     {
-        public int Id { get; set; }
 
         [Column(TypeName = "nvarchar(50)")]
         public string FirstName { get; set; }

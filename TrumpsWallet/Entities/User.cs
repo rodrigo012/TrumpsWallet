@@ -28,7 +28,7 @@ namespace TrumpsWallet.Entities
 
 
         [ForeignKey("Role")]
-        public int RoleId { get; set; }
+        public int RoleId { get; set; } = 2;
         public Role Role { get; set; }
     }
 }
